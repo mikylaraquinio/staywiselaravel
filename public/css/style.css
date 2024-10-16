@@ -1,9 +1,4 @@
 body{
-    background-image: url('images\bg.jpeg');
-    background-blend-mode: multiply;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
 }
 /*navbar*/
 .navbar{
@@ -108,13 +103,13 @@ body{
 .sign-in-container{
     z-index: 2;
 }
-form{
-    height: 100;
+form {
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0px 50px;
+    background-color: transparent;
 }
 h1{
     color: var(--grad-clr1);
@@ -361,5 +356,8 @@ form button {
 
     .overlay-container {
         display: none; /* Hide overlay on smaller screens */
+    }
+    form {
+        padding: 0 20px; /* Adjust padding for smaller devices */
     }
 }

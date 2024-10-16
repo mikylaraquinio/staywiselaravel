@@ -23,13 +23,18 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            <!-- Conditionally include the appropriate navigation -->
+            @if (Request::is('admin*'))
+                @include('layouts.admin-navigation')
+            @else
+                @include('layouts.navigation')
+            @endif
 
             <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
         </div>
-
     </body>
+
 </html>
