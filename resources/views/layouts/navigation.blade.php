@@ -2,7 +2,7 @@
     <div class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand fs-4" href="{{ url('/welcome') }}">StayWise</a>
+            <a class="navbar-brand fs-4" href="{{ route('dashboard') }}">StayWise</a>
             
             <!-- Toggle Button -->
             <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -23,9 +23,22 @@
                         <li class="nav-item mx-2">
                             <a class="nav-link" aria-current="page" href="{{ route('dashboard') }}">Home</a>
                         </li>
+                        @auth
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('dorm') }}">Dorms</a>
                         </li>
+                        <!-- Display Create Post link if the user is an owner -->
+                        @if (Auth::user()->role === 'owner')
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ route('post') }}">Create Post</a>
+                        </li>
+                        @endif
+                        @if (Auth::user()->role === 'renter')
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="#">Status</a>
+                        </li>
+                        @endif
+                        @endauth
                     </ul>
                 </div>
             </div>

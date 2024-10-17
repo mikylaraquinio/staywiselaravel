@@ -53,9 +53,6 @@
                                             <li class="nav-item mx-2">
                                                 <a class="nav-link" aria-current="page" href="{{ route("dashboard") }}">Home</a>
                                             </li>
-                                            <li class="nav-item mx-2">
-                                                <a class="nav-link">About</a>
-                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -94,10 +91,6 @@
                             <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn-hero btn-lg mt-3">Find Rooms</a>
                         </div>
                     </section>
-
-                    <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                        StayWise 2024
-                    </footer>
                 </div>
             </div>
         </div>

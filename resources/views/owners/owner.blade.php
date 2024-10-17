@@ -38,8 +38,8 @@
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Users:</h6>
-                        <a class="collapse-item" href="{{ route('admin.incomingOwnerRequest') }}">Owner</a>
-                        <a class="collapse-item" href="{{ route('admin.renters') }}">Renters</a>
+                        <a class="collapse-item" href="#">Owner</a>
+                        <a class="collapse-item" href="#">Renters</a>
                     </div>
                 </div>
             </li>
@@ -58,7 +58,7 @@
 
                 <!-- Content Row -->
                 <div class="row">
-                    <!-- Owners Card -->
+                    <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
@@ -76,7 +76,7 @@
                         </div>
                     </div>
 
-                    <!-- Renters Card -->
+                    <!-- Earnings (Annual) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-success shadow h-100 py-2">
                             <div class="card-body">
@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <!-- Pending Requests Card -->
+                    <!-- Pending Requests Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
@@ -114,32 +114,6 @@
                 </div>
             </div>
             <!-- End of Main Content -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                     Owner Registration Request
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
-                                <th>Identification</th>
-                                <th>Image</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                    
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
