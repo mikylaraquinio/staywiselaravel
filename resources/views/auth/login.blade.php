@@ -8,6 +8,11 @@
             <div class="container" id="container">
                 <div class="form-container sign-in-container">
                         <h1>Sign in</h1>
+                        @if(session()->has('message'))
+                            <p class="alert alert-info">
+                                {{session()->get('message')}}
+                            </p>
+                        @endif
                         <!-- Email Address -->
                         <div class="infield">
                             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus placeholder="Username" />

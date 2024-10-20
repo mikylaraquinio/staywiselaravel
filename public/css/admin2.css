@@ -1,7 +1,7 @@
 .sidebar {
     width: 6.5rem;
     min-height: 100vh;
-    margin-top: 3.89rem; /* Adjust this value to match the height of your navbar */
+     /* Adjust this value to match the height of your navbar */
 }
 
 .sidebar .nav-item {

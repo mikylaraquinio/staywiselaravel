@@ -1,7 +1,7 @@
 <x-admin-layout>
     <x-slot name="header"></x-slot>
 
-    <div id="wrapper" class="d-flex">
+    <div id="wrapper" class="d-flex" style="margin-top: 60px;">
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
@@ -17,7 +17,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
@@ -33,13 +33,14 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
-                    <span>Users</span>
+                    <span>User Management</span>
                 </a>
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Users:</h6>
-                        <a class="collapse-item" href="{{ route('admin.incomingOwnerRequest') }}">Owner</a>
-                        <a class="collapse-item" href="{{ route('admin.renters') }}">Renters</a>
+                        <h6 class="collapse-header">User Management:</h6>
+                        <a class="collapse-item" href="{{ route('admin.owner') }}">New Owner</a>
+                        <a class="collapse-item" href="{{ route('admin.postRequest') }}">Owner Post Request</a>
+                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Unapproved Rooms</a>
                     </div>
                 </div>
             </li>
@@ -117,24 +118,13 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                     Owner Registration Request
+                     New Post Request
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
-                                <th>Identification</th>
-                                <th>Image</th>
-
-                                </tr>
-                            </thead>
                             <tbody>
-                                    
+                            
                             </tbody>
                         </table>
                     </div>

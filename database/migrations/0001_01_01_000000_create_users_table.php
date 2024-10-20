@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('identification')->nullable(); // For owner
             $table->string('image')->nullable(); // For owner
             $table->string('usertype')->default('user');
+            $table->boolean('approved')->default(0)->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

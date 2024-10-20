@@ -30,7 +30,7 @@
                         <!-- Display Create Post link if the user is an owner -->
                         @if (Auth::user()->role === 'owner')
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="{{ route('post') }}">Create Post</a>
+                            <a class="nav-link" href="{{ route('post') }}">Dashboard</a>
                         </li>
                         @endif
                         @if (Auth::user()->role === 'renter')

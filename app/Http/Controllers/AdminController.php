@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rooms;
-use App\Models\PetSocial;
-use App\Models\Report;
-use App\Models\ReportedPetSocialPost;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -14,168 +11,61 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
+
     public function index()
     {
-        //number of current users
-        $userCount = User::count();
-
-        //number of rooms that available for renting
-        $roomCount = room::whereDoesntHave('bookingRequests', function ($query) {
-            $query->whereIn('status', ['accepted', 'done']);
-        })->count();
-
-        //number of overall leased room
-        $leasedRoomCount = Pet::whereHas('bookingRequests', function ($query) {
-            $query->where('status', 'done');
-        })->count();
-
-        $reports = Report::whereHas('user', function ($quer) {
-            $quer->where('is_admin', '0');
-        })->whereHas('room', function ($quer) {
-            $quer->whereHas('user', function ($quer) {
-                $quer->where('is_admin', '0');
-            });
-        })->get();
-        $reportsPetSocial = ReportedPetSocialPost::whereHas('user', function ($query) {
-            $query->where('is_admin', '0');
-        })->whereHas('petSocial', function ($query) {
-            $query->whereHas('user', function ($query) {
-                $query->where('is_admin', '0');
-            });
-        })->get();
-
-        $banned = User::where('is_banned', '1')->count();
-
-        return view('admin.index', [
-            'availablePetsCount' => $petCount,
-            'userCount' => $userCount,
-            'adoptedPetCount' => $adoptedPetCount,
-            'reports' => $reports,
-            'banned' => $banned,
-            'reportsPetSocial' => $reportsPetSocial
-        ]);
+        // Your logic here, e.g., fetching data
+        return view('admin.dashboard'); // Replace with your view
     }
 
-
-    public function users()
+    public function unapprovedRooms()
     {
-        $users = User::where('is_banned', '0')->where('is_admin', '0')->get();
-        return view('admin.current-users', ['users' => $users]);
-    }
-    public function bannedusers()
+        // Retrieve all rooms that are unapproved
+        $unapprovedRooms = Room::where('status', false)->get();
+        
+        return view('admin.unapprovedRooms', compact('unapprovedRooms'));
+    }  
+
+    public function approveRoom($id)
     {
-        $users = User::where('is_banned', '1')->where('is_admin', '0')->get();
-        return view('admin.banned-users', ['users' => $users]);
+        $room = Room::findOrFail($id);
+        $room->status = true; // Mark as approved
+        $room->save();
+
+        return redirect()->back()->with('success', 'Room approved successfully.');
     }
-    public function pets()
+
+    public function rejectRoom($id)
     {
-        $pets = Pet::whereDoesntHave('adoptionRequests', function ($query) {
-            $query->whereIn('status', ['accepted', 'done']);
-        })->get();
+        $room = Room::findOrFail($id);
+        $room->delete(); // Remove the room post or set status to rejected
 
-        return view('admin.pets', ['pets' => $pets]);
+        return view('admin.dashboard');
     }
-    public function Adoptedpets()
+
+    public function showNewOwners()
     {
-        $pets = Pet::with('adoptionRequests')->whereHas('adoptionRequests', function ($query) {
-            $query->where('status', 'done');
-        })->get();
-        return view('admin.adopted-pets', ['pets' => $pets]);
+        // Fetch new owner users who are not approved
+        $newOwners = User::where('role', 'owner')->where('approved', 0)->get();
+
+        return view('admin.owner', compact('newOwners'));
     }
 
-
-    public function show(User $id)
+    public function approve($id)
     {
-        $pets = $id->pets()->paginate(10); // Fix: Call paginate() before get()
-
-        return view('admin.user', [
-            'user' => $id,
-            'pets' => $pets
-        ]);
+        $owner = User::findOrFail($id);
+        $owner->approved = 1; // Mark as approved
+        $owner->save();
+    
+        return redirect()->route('admin.owner')->with('success', 'Owner approved successfully.');
     }
-
-    public function showPost(Pet $id)
+    
+    public function reject($id)
     {
-        $id = Pet::with('user')->find($id->id);
-        return view('admin.post', [
-            'pet' => $id
-        ]);
-    }
-    public function unban(User $id)
-    {
-
-        $id->update(['is_banned' => false]);
-        notify()->success('', 'User successfully unban');
-        return redirect()->back();
-    }
-    public function ban(User $id)
-    {
-        // Log a message to check if the function is reached
-        Log::info('Ban user function reached for user ID: ' . $id->id);
-
-        // Delete associated pets and adoption requests
-        $id->pets->each(function ($pet) {
-            // Log a message for each pet to check if this part is reached
-            Log::info('Deleting pet ID: ' . $pet->id);
-
-            // Delete associated adoption requests
-            $pet->adoptionRequests->each(function ($request) {
-                Log::info('Deleting adoption request ID: ' . $request->id);
-                $request->delete();
-            });
-
-            // Delete pet image from storage
-            if (File::exists($pet->img)) {
-                File::delete($pet->img);
-            }
-
-            // Delete the pet
-            $pet->delete();
-        });
-        $id->PetSocials->each(function ($post) {
-            // Log a message for each pet to check if this part is reached
-            Log::info('Deleting post ID: ' . $post->id);
-
-            // Delete associated adoption requests
-            $post->report->each(function ($report) {
-                Log::info('Deleting report ID: ' . $report->id);
-                $report->delete();
-            });
-
-            // Delete pet image from storage
-            if (File::exists($post->img)) {
-                File::delete($post->img);
-            }
-
-            // Delete the pet
-            $post->delete();
-        });
-
-        // Log a message to check if the user's is_banned status is updated
-        Log::info('Updating user is_banned status for user ID: ' . $id->id);
-        $id->update(['is_banned' => true]);
-        notify()->success('', 'User successfully banned');
-        return response()->json('success');
+        $owner = User::findOrFail($id);
+        $owner->delete(); // Or any other logic for rejection
+    
+        return redirect()->route('admin.owner')->with('success', 'Owner rejected successfully.');
     }
 
-    public function showUserSocial(User $id)
-    {
-        $posts = $id->PetSocials;
-
-        return view('admin.user-social', [
-            'user' => $id,
-            'posts' => $posts
-        ]);
-    }
-    public function petSocialDelete(PetSocial $id)
-    {
-        Log::info('hello');
-        // Delete pet image from storage
-        if (File::exists($id->img)) {
-            File::delete($id->img);
-        }
-        $id->delete();
-        Log::info('successfully deleted');
-        return response()->json('success');
-    }
 }

@@ -17,7 +17,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('post') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
@@ -36,8 +36,8 @@
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Owner:</h6>
-                        <a class="collapse-item" href="{{ route('admin.owners') }}">Post</a>
-                        <a class="collapse-item" href="{{ route('admin.renters') }}">Incoming Request</a>
+                        <a class="collapse-item" href="{{route('post')}}">Post</a>
+                        <a class="collapse-item" href="{{ route('owner.incomingRequest') }}">Incoming Request</a>
                     </div>
                 </div>
             </li>
@@ -56,67 +56,77 @@
 
                 <!-- Content Row -->
                 <div class="row">
-                <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
+                    <div class="page-content">
+                        <div class="page-header">
+                            <div class="container-fluid">
+                                <div class="text-center mb-4">
+                                    <h1 class="h3">Add Room</h1>
+                                </div>
 
-              <div class="div_center">
-                <h1>Add Rooms</h1>
-                <form action="{{url('add_room')}}" method="Post" enctype="multipart/form-data">
+                                <!-- Display Success Message -->
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
 
+                                <!-- Display Validation Errors -->
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
 
-                    @csrf
+                                <form action="{{ url('add_room') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
 
-                    <div class="div_deg">
-                        <label> Room title </label>
-                        <input type="text" name="title">
+                                    <div class="mb-3">
+                                        <label for="room_title" class="form-label">Room Title</label>
+                                        <input type="text" name="room_title" id="room_title" class="form-control" placeholder="Enter room title" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Room Description</label>
+                                        <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter room description" required></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="number" name="price" id="price" class="form-control" placeholder="Enter room price" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="amenities" class="form-label">Amenities</label>
+                                        <input type="text" name="amenities" id="amenities" class="form-control" placeholder="Enter amenities (e.g., WiFi, TV)" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="room_type" class="form-label">Room Type</label>
+                                        <select name="room_type" id="room_type" class="form-select" required>
+                                            <option value="" disabled selected>Select room type</option>
+                                            <option value="studio">Studio</option>
+                                            <option value="apartment">Apartment</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Upload Image</label>
+                                        <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary" type="submit">Add Room</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="div_deg">
-                        <label> Room description </label>
-                        <textarea name="description"></textarea>
-                    </div>
-
-                    <div class="div_deg">
-                        <label> Price </label>
-                        <input type="number" name="price">
-                    </div>
-
-                    <div class="div_deg">
-                        <label> Room Type </label>
-                        <select name="type">
-                            <option  value = "studio">Studio</option>
-                            <option value="apartment">Apartment</option>
-                        </select>
-                    </div>
-
-                    <div class="div_deg">
-                        <label> Wifi</label>
-                        <select name="wifi">
-                            <option  value = "yes">yes</option>
-                            <option value="no">no</option>
-                        </select>
-                    </div> 
-
-                    <div class="div_deg">
-                        <label>Upload Image </label>
-                        <input type= "file" name="image">
-                    </div>
-
-                    <div class="div_deg">
-                        <input class="btn btn-primary" type="submit" value="Add Room">
-                    </div>
-
-                  
-
-
-          </div>
-        </div>
-    </div>
-    
-    
                 </div>
-            </div>
+
             <!-- End of Main Content -->
 
             <!-- Footer -->
