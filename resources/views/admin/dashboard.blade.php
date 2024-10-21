@@ -33,14 +33,29 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
-                    <span>User Management</span>
+                    <span>Owner</span>
                 </a>
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Management:</h6>
+                        <h6 class="collapse-header">Owner Management:</h6>
                         <a class="collapse-item" href="{{ route('admin.owner') }}">New Owner</a>
-                        <a class="collapse-item" href="{{ route('admin.postRequest') }}">Owner Post Request</a>
-                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Unapproved Rooms</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedOwner') }}">Approved Owners</a>
+                        <a class="collapse-item" href="{{ route('admin.rejectedOwner') }}">Rejected Owners</a>
+                    </div>
+                </div>
+            </li>   
+
+            <!-- Room Management -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRoom" aria-expanded="false" aria-controls="collapseRoom">
+                    <i class="bi bi-gear"></i>
+                    <span>Room Management</span>
+                </a>
+                <div id="collapseRoom" class="collapse" aria-labelledby="headingRoom" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Room Management:</h6>
+                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Post Request</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedRooms') }}">Approved Rooms</a>
                     </div>
                 </div>
             </li>
@@ -48,13 +63,12 @@
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column" style="margin-top: 50px;"> <!-- Adjust margin here -->
+        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column">
             <!-- Main Content -->
             <div id="content" class="container-fluid">
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </a>
                 </div>
 
                 <!-- Content Row -->
@@ -63,14 +77,13 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Owners</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">1</div>
-                                    </div>
+                                <div class="row align-items-center justify-content-between">
                                     <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        <i class="bi bi-person-fill-check" style="font-size: 4rem;"></i>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Owners</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $ownersCount }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -81,32 +94,47 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-success shadow h-100 py-2">
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Renters</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">2</div>
-                                    </div>
+                                <div class="row align-items-center justify-content-between">
                                     <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        <i class="bi bi-person-fill" style="font-size: 4rem;"></i>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Renters</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $rentersCount }}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Pending Requests Card -->
+                    <!-- Pending User Requests Card -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Incoming Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                    </div>
+                                <div class="row align-items-center justify-content-between">
                                     <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        <i class="bi bi-person-add" style="font-size: 4rem;"></i>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending User Requests</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $pendingUserRequestsCount }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Post Requests Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-house-add-fill" style="font-size: 4rem;"></i>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Pending Post Requests</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $pendingPostRequestsCount }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -115,21 +143,6 @@
                 </div>
             </div>
             <!-- End of Main Content -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                     New Post Request
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <tbody>
-                            
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

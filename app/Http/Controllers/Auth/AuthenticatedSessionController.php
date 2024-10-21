@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Owner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -24,18 +25,27 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+
         $request->authenticate();
+
+        $user = $request->user();
+
+        // Check if the user is an owner and is not approved
+        if ($user->role === 'owner' && !$user->approved) {
+            Auth::logout(); // Log out the user
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your account is not approved yet. Please wait for approval.',
+            ]);
+        }
 
         $request->session()->regenerate();
 
-        if($request-> user()->role == 'admin'){
+        if ($user->role == 'admin') {
             return redirect('admin/dashboard');
         }
-        else
 
-        //return redirect()->intended(route('dashboard', absolute: false));
         return redirect()->intended(route('dashboard'));
-    }
+        }
 
     /**
      * Destroy an authenticated session.

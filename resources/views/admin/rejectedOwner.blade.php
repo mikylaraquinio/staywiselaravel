@@ -12,10 +12,8 @@
                 <div class="sidebar-brand-text mx-3 text-white">ADMIN</div>
             </a>
 
-            <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-speedometer2"></i>
@@ -23,13 +21,11 @@
                 </a>
             </li>
 
-            <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
             <div class="sidebar-heading text-white" style="font-size: 14px;">Interface</div>
 
-            <!-- Nav Item - Users -->
+            <!-- Nav Item - Owner -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
@@ -57,20 +53,20 @@
                         <a class="collapse-item" href="{{ route('admin.approvedRooms') }}">Approved Rooms</a>
                     </div>
                 </div>
-            </li>
+            </li>  
         </ul>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="flex-grow-1 d-flex flex-column">
             <!-- Main Content -->
             <div id="content" class="container-fluid">
-                <h1 class="h3 mb-0 text-gray-800">New Owner Request</h1>
+                <h1 class="h3 mb-0 text-gray-800">Rejected Owner Requests</h1>
 
-                <!-- New Owner Requests Table -->
+                <!-- Rejected Owner Requests Table -->
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        New Owner Requests
+                        Rejected Owner Requests
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -82,11 +78,10 @@
                                         <th>Email</th>
                                         <th>ID</th>
                                         <th>ID Image</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($newOwners as $owner)
+                                    @foreach ($rejectedOwners as $owner)
                                         <tr>
                                             <td>{{ $owner->name }}</td>
                                             <td>{{ $owner->number }}</td>
@@ -98,16 +93,6 @@
                                                 @else
                                                     No Image Available
                                                 @endif
-                                            </td>
-                                            <td>
-                                                <form action="{{ route('admin.approve', $owner->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                                                </form>
-                                                <form action="{{ route('admin.reject', $owner->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

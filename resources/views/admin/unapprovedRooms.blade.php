@@ -33,14 +33,28 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
-                    <span>User Management</span>
+                    <span>Owner</span>
                 </a>
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Management:</h6>
+                        <h6 class="collapse-header">Owner Management:</h6>
                         <a class="collapse-item" href="{{ route('admin.owner') }}">New Owner</a>
-                        <a class="collapse-item" href="{{ route('admin.postRequest') }}">Owner Post Request</a>
-                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Unapproved Rooms</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedOwner') }}">Approved Owners</a>
+                        <a class="collapse-item" href="{{ route('admin.rejectedOwner') }}">Rejected Owners</a>
+                    </div>
+                </div>
+            </li>   
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                    <i class="bi bi-gear"></i>
+                    <span>Room Management</span>
+                </a>
+                <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Room Management:</h6>
+                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Post Request</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedRooms') }}">Approved Rooms</a>
                     </div>
                 </div>
             </li>

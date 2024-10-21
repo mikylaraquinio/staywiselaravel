@@ -1,7 +1,7 @@
 <x-admin-layout>
     <x-slot name="header"></x-slot>
 
-    <div id="wrapper" class="d-flex">
+    <div id="wrapper" class="d-flex" style="margin-top: 60px;">
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
@@ -33,34 +33,44 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
-                    <span>User Management</span>
+                    <span>Owner</span>
                 </a>
                 <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Management:</h6>
+                        <h6 class="collapse-header">Owner Management:</h6>
                         <a class="collapse-item" href="{{ route('admin.owner') }}">New Owner</a>
-                        <a class="collapse-item" href="{{ route('admin.postRequest') }}">Owner Post Request</a>
-                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Unapproved Rooms</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedOwner') }}">Approved Owners</a>
+                        <a class="collapse-item" href="{{ route('admin.rejectedOwner') }}">Rejected Owners</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                    <i class="bi bi-gear"></i>
+                    <span>Room Management</span>
+                </a>
+                <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Room Management:</h6>
+                        <a class="collapse-item" href="{{ route('admin.unapprovedRooms') }}">Post Request</a>
+                        <a class="collapse-item" href="{{ route('admin.approvedRooms') }}">Approved Rooms</a>
                     </div>
                 </div>
             </li>
         </ul>
-        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column" style="margin-top: 50px;">
+        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column">
             <!-- Main Content -->
             <div id="content" class="container-fluid">
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                </div>
+                <h1 class="h3 mb-0 text-gray-800">Approved Rooms</h1>
 
-                <!-- New Post Request Card -->
+                <!-- Approved Rooms Table -->
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        New Post Request
+                        Approved Room Posts
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -73,38 +83,31 @@
                                         <th>Amenities</th>
                                         <th>Room Type</th>
                                         <th>Image</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($unapprovedRooms as $room)
+                                @if($approvedRooms->isEmpty())
                                         <tr>
-                                            <td>{{ $room->room_title }}</td>
-                                            <td>{{ $room->description }}</td>
-                                            <td>{{ number_format($room->price, 2) }}</td>
-                                            <td>{{ $room->amenities }}</td>
-                                            <td>{{ $room->room_type }}</td>
-                                            <td>
-                                                @if($room->image)
-                                                    <img src="{{ asset('storage/' . $room->image) }}" alt="Room Image" style="max-width: 100px;">
-                                                @else
-                                                    No Image
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <form action="{{ route('approve.room', $room->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit" class="btn btn-success">Approve</button>
-                                                </form>
-                                                <form action="{{ route('reject.room', $room->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Reject</button>
-                                                </form>
-                                            </td>
+                                            <td colspan="6">No approved rooms available.</td>
                                         </tr>
-                                    @endforeach
+                                    @else
+                                        @foreach($approvedRooms as $room)
+                                            <tr>
+                                                <td>{{ $room->room_title }}</td>
+                                                <td>{{ $room->description }}</td>
+                                                <td>{{ number_format($room->price, 2) }}</td>
+                                                <td>{{ $room->amenities }}</td>
+                                                <td>{{ $room->room_type }}</td>
+                                                <td>
+                                                    @if($room->image)
+                                                        <img src="{{ asset('public/' . $room->image) }}" alt="Room Image" style="max-width: 100px;">
+                                                    @else
+                                                        No Image
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -112,15 +115,6 @@
                 </div>
             </div>
             <!-- End of Main Content -->
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; StayWise 2024</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
         </div>
         <!-- End of Content Wrapper -->
     </div>

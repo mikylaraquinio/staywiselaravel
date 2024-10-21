@@ -2,71 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room; // Import your Room model
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function storeBooking(Request $request)
+    public function create($id)
     {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'room_id' => 'required|exists:room,id',
-            'user_id' => 'required|exists:users,id',
-            'owner_id' => 'required|exists:owners,id',
-            'move_in_date' => 'required|date',
-            'move_out_date' => 'required|date',
-            'number_of_occupants' => 'required|integer|min:1',
-            'duration' => 'required|string',
-            'message' => 'nullable|string|max:255',
-        ]);
-
-        // Create a new booking
-        $booking = Booking::create($validatedData);
-
-        // Optionally, redirect back or show a success message
-        return redirect()->route('dorm')->with('success', 'Booking submitted successfully!');
+        $room = Room::findOrFail($id); // Retrieve the room by ID
+        return view('bookings.create', compact('room'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $booking = Booking::findOrFail($id);
-        
-        // Update the booking status
-        $booking->status = $request->status;
-        $booking->save();
+    // Store the booking
+    public function store(Request $request)
+{
+    $request->validate([
+        'room_id' => 'required|exists:room,id',
+        'user_id' => 'required|exists:users,id',
+        'move_in_date' => 'required|date',
+        'move_out_date' => 'required|date',
+        'number_of_occupants' => 'required|integer|min:1',
+        'duration' => 'required|string',
+        'message' => 'nullable|string',
+    ]);
 
-        return redirect()->back()->with('success', 'Booking request updated successfully!');
-    }
+    Booking::create([
+        'room_id' => $request->room_id,
+        'user_id' => $request->user_id,
+        'move_in_date' => $request->move_in_date,
+        'move_out_date' => $request->move_out_date,
+        'number_of_occupants' => $request->number_of_occupants,
+        'duration' => $request->duration,
+        'message' => $request->message,
+        'status' => 'pending', // Set initial status to pending
+    ]);
 
-    public function showIncomingRequest()
-    {
-        $ownerId = auth()->user()->id;  // Assuming the currently logged-in user is the owner
-        $bookings = Booking::where('owner_id', $ownerId)->where('status', 'pending')->get();
-
-        return view('owner.incomingRequest', compact('bookings'));
-        dd(view()->exists('owner.incomingRequest'));
-    }
-    
-
-
-    public function approve($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->status = 'approved';
-        $booking->save();
-
-        return redirect()->route('owner.incomingRequest')->with('success', 'Booking approved successfully.');
-    }
-
-    public function reject($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->status = 'rejected';
-        $booking->save();
-
-        return redirect()->route('owner.incomingRequest')->with('success', 'Booking rejected successfully.');
-    }
-
+    return redirect()->route('dorm')->with('success', 'Booking request submitted successfully!');
+}
 
 }

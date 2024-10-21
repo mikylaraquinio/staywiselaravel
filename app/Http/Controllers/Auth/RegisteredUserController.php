@@ -54,7 +54,9 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        if ($user->role !== 'owner') {
+            Auth::login($user);
+        }
 
         return redirect()->route('login');
     }

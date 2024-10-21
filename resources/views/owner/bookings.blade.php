@@ -16,7 +16,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('post') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
@@ -26,7 +26,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Nav Item - Users -->
+            <!-- Nav Item - Rooms -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
@@ -41,43 +41,49 @@
                 </div>
             </li>
         </ul>
-        <!-- End of Sidebar -->
 
-        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
             <div id="content" class="container-fluid">
-                <h1 class="h3 mb-0 text-gray-800">My Rooms</h1>
+                <h1 class="h3 mb-4 text-gray-800">Bookings Room</h1>
 
-                @if ($rooms->isEmpty())
-                    <p>No approved rooms available.</p>
+                @if(isset($bookings) && $bookings->isEmpty())
+                    <p>No new booking requests.</p>
                 @else
-                    <table class="table table-striped">
+                    <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Room Title</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Actions</th>
+                                <th>Room Title</th>
+                                <th>Requested By</th>
+                                <th>Move In</th>
+                                <th>Move Out</th>
+                                <th>Occupants</th>
+                                <th>Duration</th>
+                                <th>Message</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($rooms as $room)
-                                <tr>
-                                    <td>{{ $room->room_title }}</td>
-                                    <td>{{ $room->description }}</td>
-                                    <td>{{ number_format($room->price, 2) }}</td>
-                                    <td>
-                                        <img src="{{ asset($room->image) }}" alt="{{ $room->room_title }}" style="width: 50px; height: auto;">
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('editRoom', ['id' => $room->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                                        <form action="{{ route('deleteRoom', ['id' => $room->id]) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                            @foreach($bookings as $booking)
+                            <tr>
+                                <td>{{ $booking->room->room_title }}</td>
+                                <td>{{ $booking->user->name }}</td>
+                                <td>{{ $booking->move_in_date }}</td>
+                                <td>{{ $booking->move_out_date }}</td>
+                                <td>{{ $booking->number_of_occupants }}</td>
+                                <td>{{ $booking->duration }}</td>
+                                <td>{{ $booking->message }}</td>
+                                <td>
+                                    <form action="{{ route('owner.bookings.accept', $booking->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form action="{{ route('owner.bookings.reject', $booking->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

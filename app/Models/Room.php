@@ -19,5 +19,6 @@ class Room extends Model
         'room_type',
         'image',
         'status',
+        'owner_id', // Ensure this is included if you're referencing the owner
     ];
 }

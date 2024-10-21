@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Room;
@@ -6,13 +7,6 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-
-    public function owners()
-    {
-        // Fetch owners or handle your logic here
-        return view('admin.owner'); // Adjust according to your view
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -38,7 +32,7 @@ class RoomController extends Controller
             'amenities' => $request->amenities,
             'room_type' => $request->room_type,
             'image' => $imagePath,
-            'status' => false, // Mark as unapproved initially
+            'approved' => false, // Mark as unapproved initially
         ]);
 
         // Now you can access the room ID
@@ -50,7 +44,7 @@ class RoomController extends Controller
     public function approve($id)
     {
         $room = Room::findOrFail($id);
-        $room->status = true; // Change status to approved
+        $room->approved = true; // Change approved status to true
         $room->save();
 
         // Redirect to a specific route or back with a success message
@@ -68,14 +62,15 @@ class RoomController extends Controller
 
     public function showDorms()
     {
-        $rooms = Room::where('status', true)->get(); // Corrected variable name here
-        return view('dorm', compact('rooms')); // This will work now
+        // Fetch approved rooms for display
+        $rooms = Room::where('approved', true)->get();
+        return view('dorm', compact('rooms'));
     }
 
     public function postRequest()
     {
         // Logic to fetch post requests from the database
-        $postRequests = Room::where('status', 'pending')->get(); // Adjust the condition based on your logic
+        $postRequests = Room::where('approved', false)->get(); // Fetching unapproved rooms
 
         // Pass the data to the view
         return view('admin.postRequest', compact('postRequests')); // Ensure this view exists
@@ -85,4 +80,14 @@ class RoomController extends Controller
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    public function post()
+    {
+        // Fetch approved rooms for the owner
+        $rooms = Room::where('approved', 1)->get(); // Adjust this based on your actual approved column name
+    
+        // Return the view with the rooms data
+        return view('post', compact('rooms'));
+    }
+    
 }
