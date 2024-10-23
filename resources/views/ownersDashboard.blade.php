@@ -37,7 +37,20 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Owner:</h6>
                         <a class="collapse-item" href="{{ route('post') }}">Post</a>
-                        <a class="collapse-item" href="{{ route('owner.bookings') }}">Bookings</a>
+                        <a class="collapse-item" href="{{ route('owner.bookings') }}">Incoming Request</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                    <i class="bi bi-gear"></i>
+                    <span>Requests</span>
+                </a>
+                <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Bookings Requests:</h6>
+                        <a class="collapse-item" href="{{ route('owner.approvedBookings') }}">Accepted</a>
+                        <a class="collapse-item" href="{{ route('owner.rejectedBookings') }}">Rejected</a>
                     </div>
                 </div>
             </li>

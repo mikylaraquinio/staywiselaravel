@@ -78,18 +78,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rooms/approved', [RoomController::class, 'showApprovedRooms'])->name('rooms.showApproved');
 });
 
-//Owner Bookings
-Route::middleware(['auth'])->group(function () {
-    Route::get('/owner/dashboard', [OwnerController::class, 'ownerdashboard'])->name('owner.dashboard');
-    Route::get('/owner/bookings', [OwnerController::class, 'showBookings'])->name('owner.bookings');
-    Route::post('/owner/bookings/{id}/accept', [OwnerController::class, 'acceptBooking'])->name('owner.acceptBooking');
-    Route::post('/owner/bookings/{id}/reject', [OwnerController::class, 'rejectBooking'])->name('owner.rejectBooking');
-    Route::get('/owner/incoming-requests', [OwnerController::class, 'showIncomingRequest'])->name('owner.incomingRequests');
-});
-
-
-
-
 // Admin - Unapproved Rooms
 Route::get('/admin/unapprovedRooms', [AdminController::class, 'unapprovedRooms'])->name('admin.unapprovedRooms');
 Route::put('/admin/approve-room/{id}', [AdminController::class, 'approveRoom'])->name('approve.room');
@@ -117,29 +105,24 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 
 
 //Owner Controller
-Route::post('/bookings', [OwnerController::class, 'store'])->name('owner.bookings');
-Route::get('/owner/bookings', [OwnerController::class, 'incomingRequest'])->name('owner.bookings');
-Route::get('/owner/bookings', [OwnerController::class, 'showBookings'])->name('owner.bookings.index');  
-Route::get('/owner/incoming-requests', [OwnerController::class, 'incomingRequest'])->name('owner.bookings');
-Route::post('/owner/bookings/{booking}/accept', [OwnerController::class, 'acceptBooking'])->name('owner.bookings.accept');
-Route::post('/owner/bookings/{booking}/reject', [OwnerController::class, 'rejectBooking'])->name('owner.bookings.reject');
 Route::middleware(['auth'])->group(function () {
-    Route::get('/owner/bookings', [OwnerController::class, 'dashboard'])->name('owner.bookings');
+    Route::get('/owner/bookings', [OwnerController::class, 'index'])->name('owner.bookings');
 });
 
 
 //Renter Cotroller
-Route::prefix('renters')->group(function () {
-    Route::get('/book/{room_id}', [RenterController::class, 'create'])->name('renter.book.create');
-    Route::post('/bookings', [RenterController::class, 'store'])->name('renter.bookings.store');
-    Route::get('/bookings', [RenterController::class, 'index'])->name('renter.bookings.index');
-});
-
-Route::post('/renter/bookings/store', [RenterController::class, 'store'])->name('renter.bookings.store');
-Route::get('/renters/book/{id}', [RenterController::class, 'showBookingForm'])->name('renters.book');
-
+Route::get('/renter/bookings/create', [RenterController::class, 'create'])->name('renter.bookings.create');
+Route::post('/renter/bookings', [RenterController::class, 'store'])->name('renter.bookings.store');
+Route::get('/renter/bookings', [RenterController::class, 'index'])->name('renter.bookings.index');
+Route::get('/renters/book/{room_id}', [RenterController::class, 'create'])->name('renter.book.create');
 
 
 //Booking
-Route::get('/booking/{id}', [BookingController::class, 'create'])->name('renter.bookings.create');
-Route::post('/booking/store', [BookingController::class, 'store'])->name('renter.bookings.store');
+Route::post('/owner/bookings/accept/{id}', [OwnerController::class, 'accept'])->name('owner.bookings.accept');
+Route::post('/owner/bookings/reject/{id}', [OwnerController::class, 'reject'])->name('owner.bookings.reject');
+Route::get('/owner/approved-bookings', [OwnerController::class, 'approvedBookings'])->name('owner.approvedBookings');
+Route::get('/owner/rejected-bookings', [OwnerController::class, 'rejectedBookings'])->name('owner.rejectedBookings');
+
+
+
+

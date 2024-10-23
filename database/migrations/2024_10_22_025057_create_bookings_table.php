@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users'); // Foreign key referencing the 'id' in 'users' table
-            $table->foreignId('room_id')->constrained('room');  // The user sending the booking request  
-            $table->foreignId('owner_id')->constrained('users');
+            $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
+            $table->string('name');
             $table->date('move_in_date'); 
             $table->date('move_out_date');
             $table->integer('number_of_occupants');
-            $table->string('status')->default('pending');
+            $table->boolean('approved')->default(0);
             $table->string('duration');
             $table->text('message')->nullable();
             $table->timestamps();

@@ -63,7 +63,10 @@ class RoomController extends Controller
     public function showDorms()
     {
         // Fetch approved rooms for display
-        $rooms = Room::where('approved', true)->get();
+        $rooms = Room::where('approved', true)
+                 ->where('available', true)
+                 ->get();
+                 
         return view('dorm', compact('rooms'));
     }
 

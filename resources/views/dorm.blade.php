@@ -20,22 +20,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach($rooms as $room) <!-- Correct variable name here -->
-                        @if($room->approved) <!-- Check for approved status -->
-                            <div class="col-md-4 mb-4"> <!-- Adjust column width for better layout -->
-                                <div class="card h-100 shadow-sm">
-                                    <img src="{{ asset('storage/' . $room->image) }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="{{ $room->room_title }} Image">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $room->room_title }}</h5>
-                                        <p class="card-text"><strong>Price:</strong> {{ number_format($room->price, 2) }}</p>
-                                        <p class="card-text"><strong>Type:</strong> {{ $room->room_type }}</p>
-                                        <p class="card-text">{{ Str::limit($room->description, 100, '...') }}</p> <!-- Limit description length -->
-                                        <a href="{{ route('viewdorm', ['id' => $room->id]) }}" class="btn btn-primary">View More</a>
-                                    </div>
+                @foreach($rooms as $room)
+                    @if($room->approved && $room->available)
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="{{ asset('storage/' . $room->image) }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="{{ $room->room_title }} Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $room->room_title }}</h5>
+                                    <p class="card-text"><strong>Price:</strong> {{ number_format($room->price, 2) }}</p>
+                                    <p class="card-text"><strong>Type:</strong> {{ $room->room_type }}</p>
+                                    <p class="card-text">{{ Str::limit($room->description, 100, '...') }}</p>
+                                    <a href="{{ route('viewdorm', ['id' => $room->id]) }}" class="btn btn-primary">View More</a>
                                 </div>
                             </div>
-                        @endif
-                    @endforeach
+                        </div>
+                    @endif
+                @endforeach
                 </div>
             </div>
         </section>  

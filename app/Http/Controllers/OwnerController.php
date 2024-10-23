@@ -8,63 +8,7 @@ use Illuminate\Http\Request;
 
 class OwnerController extends Controller
 {
-
-
-    public function dashboard()
-    {
-        $ownerId = auth()->user()->id; // Get the currently authenticated owner's ID
-
-        // Fetch bookings for the owner
-        $bookings = Booking::where('owner_id', $ownerId)
-            ->where('status', 'pending')
-            ->with('room', 'user') // Eager load relationships for better performance
-            ->get();
-
-        if ($bookings->isEmpty()) {
-            return redirect()->route('owner.bookings')->with('info', 'No pending bookings found.'); // Redirect instead of dd
-        }
-
-        return view('owner.bookings', compact('bookings')); // Pass bookings to the view
-    }
-
-
-    // In RenterController or appropriate controller
-    public function incomingRequests()
-    {
-        $incomingBookings = Booking::where('status', 'pending')->get();
-        $ownerId = auth()->user()->id; // Get the logged-in owner's ID
-        $ownerRooms = Room::where('owner_id', $ownerId)->pluck('id'); 
-        
-        $incomingRequests = Booking::whereIn('room_id', $ownerRooms)
-            ->where('status', 'pending')
-            ->get();
-
-        return view('owner.bookings', compact('incomingBookings'));
-    }
-
-
-
-    // Method to accept a booking
-    public function acceptBooking($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->status = 'accepted'; // Update status or any other relevant data
-        $booking->save();
-
-        return redirect()->route('owner.bookings')->with('success', 'Booking accepted successfully.');
-    }
-
-    // Method to reject a booking
-    public function rejectBooking($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->status = 'rejected'; // Update status or any other relevant data
-        $booking->save();
-
-        return redirect()->route('owner.bookings')->with('success', 'Booking rejected successfully.');
-    }
-
-    //edit button
+    //POST
     public function edit($id)
     {
         $room = Room::findOrFail($id);
@@ -114,5 +58,54 @@ class OwnerController extends Controller
         echo $amenitiesHTML;
 
     }
-    
+
+    public function index()
+    {
+        $bookings = Booking::where('approved', false)->get();
+
+        return view('owner.bookings',compact('bookings')); // Replace with your view
+    } 
+
+
+    //bookings
+
+    public function accept($id)
+    {
+        $booking = Booking::findOrFail($id); // Find booking by ID
+        $booking->approved = true; // Set approved to true
+        $booking->save(); // Save the booking
+
+        $room = Room::findOrFail($booking->room_id); // Assuming room_id is in the bookings table
+        $room->is_available = false; // Mark room as unavailable
+        $room->save();
+
+        return redirect()->route('owner.approvedBookings')->with('success', 'Booking accepted successfully!'); // Redirect back with success message
+    }
+
+    // Method to reject a booking request
+    public function reject($id)
+    {
+        $booking = Booking::findOrFail($id); // Find booking by ID
+        $booking->approved = false; // Set approved to false
+        $booking->delete();
+
+        return redirect()->route('owner.bookings')->with('success', 'Booking rejected successfully!'); // Redirect back with success message
+    }
+
+    public function approvedBookings()
+    {
+        // Retrieve all approved bookings
+        $approvedBookings = Booking::where('approved', true)->paginate(10); // You can adjust the pagination as needed
+
+        // Return the view with the approved bookings
+        return view('owner.approvedBookings', compact('approvedBookings'));
+    }
+    public function rejectedBookings()
+    {
+        // Retrieve all rejected bookings
+        $rejectedBookings = Booking::where('approved', false)->paginate(10); // You can adjust the pagination as needed
+
+        // Return the view with the rejected bookings
+        return view('owner.rejectedBookings', compact('rejectedBookings'));
+    }
 }

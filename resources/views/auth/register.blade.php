@@ -47,18 +47,18 @@
                     <div id="ownerFields" style="display: none;">
                         <div class="infield">
                             <label for="identification" class="block mt-2">Please select ID:</label>
-                            <select id="identification" name="identification" class="block mt-2 w-full" required>
+                            <select id="identification" name="identification" class="block mt-2 w-full">
                                 <option value="" disabled selected>Select an option</option>
-                                <option value="id1">Driver's License</option>
-                                <option value="id2">National Identity Card</option>
-                                <option value="id3">Passport</option>
+                                <option value="drivers license">Driver's License</option>
+                                <option value="national id">National Identity Card</option>
+                                <option value="passport">Passport</option>
                             </select>
                             <x-input-error :messages="$errors->get('identification')" class="mt-2" />
                         </div>
 
                         <div class="infield mt-4">
                             <label for="imageUpload" class="block mt-2">Upload ID Image:</label>
-                            <input id="imageUpload" type="file" name="image" class="block mt-2 w-full" accept="image/*" required />
+                            <input id="imageUpload" type="file" name="image" class="block mt-2 w-full" accept="image/*" />
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
                     </div>
@@ -111,11 +111,19 @@
         function toggleFields() {
             const role = document.getElementById('role').value;
             const ownerFields = document.getElementById('ownerFields');
+            const identificationField = document.getElementById('identification');
+            const imageField = document.getElementById('imageUpload');
 
             if (role === 'owner') {
                 ownerFields.style.display = 'block';
+                identificationField.required = true;
+                imageField.required = true;
             } else {
                 ownerFields.style.display = 'none';
+                identificationField.required = false;
+                imageField.required = false;
+                identificationField.value = '';
+                imageField.value = '';
             }
         }
     </script>

@@ -11,12 +11,12 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'room_id',
+        'name',
         'move_in_date',
         'move_out_date',
         'number_of_occupants',
-        'status',
+        'approved',
         'duration',
         'message',
     ];
@@ -28,9 +28,10 @@ class Booking extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function user()
+    public function renter()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'renter_id'); // Assuming renter is a User model
     }
+
 
 }

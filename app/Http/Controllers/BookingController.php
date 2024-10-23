@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
+
+    public function index()
+    {
+        $bookings = Booking::all();
+        return view('owner.bookings', compact('bookings'));
+    } 
+
     public function create($id)
     {
         $room = Room::findOrFail($id); // Retrieve the room by ID
@@ -17,29 +24,48 @@ class BookingController extends Controller
 
     // Store the booking
     public function store(Request $request)
-{
-    $request->validate([
-        'room_id' => 'required|exists:room,id',
-        'user_id' => 'required|exists:users,id',
-        'move_in_date' => 'required|date',
-        'move_out_date' => 'required|date',
-        'number_of_occupants' => 'required|integer|min:1',
-        'duration' => 'required|string',
-        'message' => 'nullable|string',
-    ]);
+    {
+        // Validate the form data
+        $request->validate([
+            'room_id' => 'required|exists:room,id',
+            'name' => 'required|string|max:255', // Validate the name field
+            'move_in_date' => 'required|date',
+            'move_out_date' => 'required|date|after:move_in_date',
+            'number_of_occupants' => 'required|integer|min:1',
+            'message' => 'nullable|string|max:500',
+            'duration' => 'required|string', // Validate duration if needed
+        ]);
 
-    Booking::create([
-        'room_id' => $request->room_id,
-        'user_id' => $request->user_id,
-        'move_in_date' => $request->move_in_date,
-        'move_out_date' => $request->move_out_date,
-        'number_of_occupants' => $request->number_of_occupants,
-        'duration' => $request->duration,
-        'message' => $request->message,
-        'status' => 'pending', // Set initial status to pending
-    ]);
+        // Create a new booking and include the 'name'
+        Booking::create([
+            'room_id' => $request->room_id,
+            'name' => $request->name,  // Include the name in the insertion
+            'move_in_date' => $request->move_in_date,
+            'move_out_date' => $request->move_out_date,
+            'number_of_occupants' => $request->number_of_occupants,
+            'duration' => $request->duration,
+            'message' => $request->message,
+            'approved' => 0, // Set default value
+        ]);
 
-    return redirect()->route('dorm')->with('success', 'Booking request submitted successfully!');
-}
+        // Redirect with a success message
+        return redirect()->back()->with('success', 'Booking request submitted successfully.');
+    }
+
+    public function accept($id)
+    {
+        // Find the booking by ID
+        $booking = Booking::findOrFail($id);
+
+        $bookings = Booking::where('approved', true)->get();
+
+        // Optionally, update the room availability to reflect that it's booked
+        $room = Room::find($booking->room_id);
+        $room->available = 0; // Assuming you have an 'available' column for room availability
+        $room->save();
+
+        return redirect()->route('owner.bookings')->with('success', 'Booking accepted and room removed from dorm listing.');
+    }
+
 
 }

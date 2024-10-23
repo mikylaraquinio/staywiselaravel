@@ -17,7 +17,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('post') }}">
+                <a class="nav-link" href="{{ route('ownersDashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
@@ -40,54 +40,71 @@
                     </div>
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                    <i class="bi bi-gear"></i>
+                    <span>Requests</span>
+                </a>
+                <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Bookings Requests:</h6>
+                        <a class="collapse-item" href="{{ route('owner.approvedBookings') }}">Accepted</a>
+                        <a class="collapse-item" href="{{ route('owner.rejectedBookings') }}">Rejected</a>
+                    </div>
+                </div>
+            </li>
         </ul>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
             <div id="content" class="container-fluid">
-                <h1 class="h3 mb-4 text-gray-800">Bookings Room</h1>
 
-                @if(isset($bookings) && $bookings->isEmpty())
-                    <p>No new booking requests.</p>
-                @else
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Room Title</th>
-                                <th>Requested By</th>
-                                <th>Move In</th>
-                                <th>Move Out</th>
-                                <th>Occupants</th>
-                                <th>Duration</th>
-                                <th>Message</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($bookings as $booking)
-                            <tr>
-                                <td>{{ $booking->room->room_title }}</td>
-                                <td>{{ $booking->user->name }}</td>
-                                <td>{{ $booking->move_in_date }}</td>
-                                <td>{{ $booking->move_out_date }}</td>
-                                <td>{{ $booking->number_of_occupants }}</td>
-                                <td>{{ $booking->duration }}</td>
-                                <td>{{ $booking->message }}</td>
-                                <td>
-                                    <form action="{{ route('owner.bookings.accept', $booking->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success">Accept</button>
-                                    </form>
-                                    <form action="{{ route('owner.bookings.reject', $booking->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger">Reject</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @endif
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Booking Requests
+                    </div>
+
+                    @if ($bookings->isEmpty())
+                        <p>No booking requests available.</p>
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Room Title</th>
+                                    <th>Guest Name</th>
+                                    <th>Move-In Date</th>
+                                    <th>Move-Out Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($bookings as $booking)
+                                    <tr>
+                                        <td>{{ $booking->room->room_title }}</td>
+                                        <td>{{ $booking->name }}</td>
+                                        <td>{{ $booking->move_in_date }}</td>
+                                        <td>{{ $booking->move_out_date }}</td>
+                                        <td>
+                                            @if (!$booking->approved) <!-- Check if not approved -->
+                                                <form action="{{ route('owner.bookings.accept', $booking->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                                </form>
+                                                <form action="{{ route('owner.bookings.reject', $booking->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                                </form>
+                                            @else
+                                                <span class="text-muted">No actions available</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

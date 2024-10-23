@@ -23,8 +23,12 @@
                         @csrf <!-- CSRF token for security -->
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                        <input type="hidden" name="owner_id" value="{{ $room->owner_id }}">
-
+                        
+                        <div class="form-group mb-3">
+                            <label for="name">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
                         <div class="form-group mb-3">
                             <label for="move-in-date">Preferred Move-In Date:</label>
                             <input type="date" class="form-control" id="move-in-date" name="move_in_date" required>

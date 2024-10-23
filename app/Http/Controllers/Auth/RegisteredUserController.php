@@ -34,11 +34,11 @@ class RegisteredUserController extends Controller
             'number' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'string', 'in:owner,renter'], // Ensure role is valid
-            'identification' => ['required_if:role,owner', 'string'], // Required only for owners
-            'image' => ['required_if:role,owner', 'image', 'mimes:png,jpg,jpeg'], // Required only for owners
+            'identification' => ['nullable', 'string'], // Nullable for renters
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg'], // Nullable for renters
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-    
+
         // Create the user
         $user = User::create([
             'name' => $request->name,
@@ -46,16 +46,18 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'identification' => $request->role === 'owner' ? $request->identification : null,
-            'image' => $request->role === 'owner' ? $request->file('image')->store('images') : null,
+            'identification' => $request->role === 'owner' ? $request->identification : null, // Store NULL for renters
+            'image' => $request->role === 'owner' ? $request->file('image')->store('images') : null, // Store NULL for renters
             'usertype' => 'user', // Default usertype
             'approved' => false, // Default not approved
         ]);
 
         event(new Registered($user));
 
+        // Auto-login renters after registration
         if ($user->role !== 'owner') {
             Auth::login($user);
+            return redirect()->route('dashboard'); // Redirect renters to a specific dashboard
         }
 
         return redirect()->route('login');

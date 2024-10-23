@@ -21,4 +21,9 @@ class Room extends Model
         'status',
         'owner_id', // Ensure this is included if you're referencing the owner
     ];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }
