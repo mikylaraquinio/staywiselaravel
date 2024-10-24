@@ -81,7 +81,7 @@
                             <tbody>
                                 @foreach ($bookings as $booking)
                                     <tr>
-                                        <td>{{ $booking->room->room_title }}</td>
+                                        <td>{{ $booking->room ? $booking->room->room_title : 'Room not found' }}</td>
                                         <td>{{ $booking->name }}</td>
                                         <td>{{ $booking->move_in_date }}</td>
                                         <td>{{ $booking->move_out_date }}</td>

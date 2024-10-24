@@ -52,20 +52,5 @@ class BookingController extends Controller
         return redirect()->back()->with('success', 'Booking request submitted successfully.');
     }
 
-    public function accept($id)
-    {
-        // Find the booking by ID
-        $booking = Booking::findOrFail($id);
-
-        $bookings = Booking::where('approved', true)->get();
-
-        // Optionally, update the room availability to reflect that it's booked
-        $room = Room::find($booking->room_id);
-        $room->available = 0; // Assuming you have an 'available' column for room availability
-        $room->save();
-
-        return redirect()->route('owner.bookings')->with('success', 'Booking accepted and room removed from dorm listing.');
-    }
-
 
 }

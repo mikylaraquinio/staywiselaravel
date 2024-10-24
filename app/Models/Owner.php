@@ -11,5 +11,10 @@ class Owner extends Model
 
     // Specify the table name
     protected $table = 'users';
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }
 

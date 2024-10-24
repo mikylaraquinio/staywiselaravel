@@ -23,6 +23,8 @@ class RoomController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         }
+        
+        $ownerId = auth()->id();
 
         // Create the room entry, setting approved to false
         $room = Room::create([
@@ -32,7 +34,9 @@ class RoomController extends Controller
             'amenities' => $request->amenities,
             'room_type' => $request->room_type,
             'image' => $imagePath,
-            'approved' => false, // Mark as unapproved initially
+            'approved' => false,
+            'available' => true,
+            'owner_id' => $ownerId,
         ]);
 
         // Now you can access the room ID
