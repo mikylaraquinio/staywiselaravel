@@ -5,7 +5,7 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('ownersDashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -16,7 +16,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ route('ownersDashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
@@ -26,7 +26,14 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
+
             <!-- Nav Item - Users -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner.create') }}">
+                    <i class="bi bi-gear"></i>
+                    <span>Create Room</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
@@ -37,6 +44,19 @@
                         <h6 class="collapse-header">Owner:</h6>
                         <a class="collapse-item" href="{{ route('post') }}">Post</a>
                         <a class="collapse-item" href="{{ route('owner.bookings') }}">Incoming Request</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
+                    <i class="bi bi-gear"></i>
+                    <span>Requests</span>
+                </a>
+                <div id="collapseComponents" class="collapse" aria-labelledby="headingComponents" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Bookings Requests:</h6>
+                        <a class="collapse-item" href="{{ route('owner.approvedBookings') }}">Accepted</a>
+                        <a class="collapse-item" href="{{ route('owner.rejectedBookings') }}">Rejected</a>
                     </div>
                 </div>
             </li>

@@ -19,6 +19,7 @@ class Booking extends Model
         'approved',
         'duration',
         'message',
+        'renter_id',
     ];
 
 

@@ -100,7 +100,7 @@
                                                 <td>{{ $room->room_type }}</td>
                                                 <td>
                                                     @if($room->image)
-                                                        <img src="{{ asset('public/' . $room->image) }}" alt="Room Image" style="max-width: 100px;">
+                                                        <img src="{{ asset($room->image) }}" alt="Room Image" style="max-width: 100px;">
                                                     @else
                                                         No Image
                                                     @endif

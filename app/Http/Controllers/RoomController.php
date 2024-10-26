@@ -19,9 +19,14 @@ class RoomController extends Controller
         ]);
 
         // Handle image upload
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+        if ($request->has('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+
+            $filename = time().'.'.$extension;
+
+            $path = 'uploads/rooms/';
+            $file->move($path,$filename);
         }
         
         $ownerId = auth()->id();
@@ -33,7 +38,7 @@ class RoomController extends Controller
             'price' => $request->price,
             'amenities' => $request->amenities,
             'room_type' => $request->room_type,
-            'image' => $imagePath,
+            'image' => $path.$filename,
             'approved' => false,
             'available' => true,
             'owner_id' => $ownerId,

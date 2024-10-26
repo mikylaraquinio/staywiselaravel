@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Booking;
+use App\Models\User;
+use App\Notifications\BookingAcceptedNotification;
+use App\Notifications\BookingAccepted;
 use Illuminate\Http\Request;
 
 class OwnerController extends Controller
@@ -14,6 +17,11 @@ class OwnerController extends Controller
         // Get the authenticated user's rooms
         $rooms = auth()->user()->rooms;
 
+        $bookings = collect();
+        if ($rooms->isNotEmpty()) {
+            $bookings = Booking::whereIn('room_id', $rooms->pluck('id'))->get();
+        }
+
         // Get the bookings related to those rooms
         $bookings = Booking::whereIn('room_id', $rooms->pluck('id'))->get(); // Assuming 'room_id' in bookings
 
@@ -23,14 +31,14 @@ class OwnerController extends Controller
     // Method to edit a specific room
     public function edit($id)
     {
-        $room = Room::where('id', $id)->where('user_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
+        $room = Room::where('id', $id)->where('owner_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
         return view('owner.edit', compact('room'));
     }
 
     // Method to delete a room
     public function destroy($id)
     {
-        $room = Room::where('id', $id)->where('user_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
+        $room = Room::where('id', $id)->where('owner_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
         $room->delete();
 
         return redirect()->back()->with('success', 'Room deleted successfully.');
@@ -39,7 +47,7 @@ class OwnerController extends Controller
     // Method to show the edit form for a specific room
     public function editRoom($id)
     {
-        $room = Room::where('id', $id)->where('user_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
+        $room = Room::where('id', $id)->where('owner_id', auth()->id())->firstOrFail(); // Ensure the owner owns the room
         return view('owner.editRoom', compact('room')); // Pass room to edit view
     }
 
@@ -54,16 +62,10 @@ class OwnerController extends Controller
         ]);
 
         // Find the room and ensure it's owned by the authenticated user
-        $room = Room::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $room = Room::where('id', $id)->where('owner_id', auth()->id())->firstOrFail();
         $room->room_title = $request->room_title;
         $room->description = $request->description;
         $room->price = $request->price;
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Optionally delete old image here if needed
-            $room->image = $request->file('image')->store('images', 'public');
-        }
 
         $room->save();
 
@@ -74,12 +76,17 @@ class OwnerController extends Controller
     public function accept($id)
     {
         $booking = Booking::findOrFail($id); // Find booking by ID
-        $booking->approved = true; // Set approved to true
+        $booking->approved = 1; // Set approved to true
         $booking->save(); // Save the booking
 
         $room = Room::findOrFail($booking->room_id); 
         $room->available = false; // Set room as unavailable
         $room->save();
+
+        $renter = User::find($booking->renter_id);
+
+        // Notify the renter
+        $renter->notify(new BookingAcceptedNotification($booking));
 
         return redirect()->route('owner.approvedBookings')->with('success', 'Booking accepted successfully!'); // Redirect back with success message
     }
@@ -129,4 +136,32 @@ class OwnerController extends Controller
 
         return view('owner.rejectedBookings', compact('rejectedBookings'));
     }
+
+    public function ownerDashboard()
+    {
+        $ownerId = auth()->user()->id;
+
+        // Count of all rooms owned by this owner
+        $roomCount = Room::where('owner_id')->count();
+
+        // Count of approved rooms owned by this owner
+        $availableRoomCount = Room::where('owner_id', $ownerId)->where('approved', 1)->count();
+
+        // Get all room IDs owned by the owner
+        $roomIds = Room::where('owner_id', $ownerId)->pluck('id');
+
+        // Count bookings based on the rooms owned by this owner
+        $pendingBookingCount = Booking::whereIn('room_id', $roomIds)->where('approved', 0)->count();
+        $acceptedBookingCount = Booking::whereIn('room_id', $roomIds)->where('approved', 1)->count();
+        $rejectedBookingCount = Booking::whereIn('room_id', $roomIds)->where('approved', 2)->count();
+
+        return view('ownersDashboard', compact(
+            'roomCount',
+            'availableRoomCount',
+            'pendingBookingCount',
+            'acceptedBookingCount',
+            'rejectedBookingCount'
+        ));
+    }
+
 }

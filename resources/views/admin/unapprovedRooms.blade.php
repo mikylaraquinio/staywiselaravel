@@ -77,6 +77,7 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Room Title</th>
                                         <th>Description</th>
                                         <th>Price</th>
@@ -97,7 +98,7 @@
                                             <td>{{ $room->room_type }}</td>
                                             <td>
                                                 @if($room->image)
-                                                    <img src="{{ asset('public/' . $room->image) }}" alt="Room Image" style="max-width: 100px;">
+                                                    <img src="{{ asset($room->image) }}" alt="Room Image" style="max-width: 100px;">
                                                 @else
                                                     No Image
                                                 @endif

@@ -28,7 +28,13 @@ class Room extends Model
     }
 
     public function owner()
-{
-    return $this->belongsTo(User::class, 'owner_id');
-}
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : asset('images/default.png');
+    }
+
 }

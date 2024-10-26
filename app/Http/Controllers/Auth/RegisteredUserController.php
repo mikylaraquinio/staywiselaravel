@@ -39,6 +39,16 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        if ($request->has('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+
+            $filename = time().'.'.$extension;
+
+            $path = 'uploads/rooms/';
+            $file->move($path, $filename);
+        }
+
         // Create the user
         $user = User::create([
             'name' => $request->name,
@@ -47,7 +57,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'identification' => $request->role === 'owner' ? $request->identification : null, // Store NULL for renters
-            'image' => $request->role === 'owner' ? $request->file('image')->store('images') : null, // Store NULL for renters
+            'image' => $request->role === 'owner' ? $path . $filename : null, // Store NULL for renters
             'usertype' => 'user', // Default usertype
             'approved' => false, // Default not approved
         ]);

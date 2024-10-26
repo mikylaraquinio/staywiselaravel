@@ -58,9 +58,9 @@
 
                 <!-- Approved Owner Requests Table -->
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        Approved Owner Requests
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-table me-1"></i> Approved Owner Requests</span>
+                        <a href="{{ route('admin.exportApprovedOwners') }}" class="btn btn-primary">Export as Excel</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -83,7 +83,7 @@
                                             <td>{{ $owner->identification }}</td>
                                             <td>
                                                 @if ($owner->image)
-                                                    <img src="{{ asset('storage/' . $owner->image) }}" alt="ID Image" style="width: 100px; height: auto;">
+                                                    <img src="{{ asset($owner->image) }}" alt="ID Image" style="width: 100px; height: auto;">
                                                 @else
                                                     No Image Available
                                                 @endif

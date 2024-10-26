@@ -24,7 +24,7 @@
                     @if($room->approved && $room->available)
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('storage/' . $room->image) }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="{{ $room->room_title }} Image">
+                                <img src="{{ asset($room->image) }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="{{ $room->room_title }} Image">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $room->room_title }}</h5>
                                     <p class="card-text"><strong>Price:</strong> {{ number_format($room->price, 2) }}</p>

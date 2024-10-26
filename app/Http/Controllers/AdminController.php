@@ -6,6 +6,8 @@ use App\Models\Room;
 use App\Models\User;
 use App\Models\Owner;
 use Illuminate\Http\Request;
+use App\Exports\ApprovedOwnersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +24,9 @@ class AdminController extends Controller
         $rentersCount = User::where('role', 'renter')->count();
 
         // Count the number of pending user requests (assuming pending user requests have a 'status' field)
-        $pendingUserRequestsCount = User::where('approved', 0)->count();
+        $pendingUserRequestsCount = User::where('approved', 0)
+                                    ->where('role', 'owner')
+                                    ->count();
 
         // Count the number of pending post requests (assuming pending posts are in the 'room' table and have an 'approved' column)
         $pendingPostRequestsCount = Room::where('approved', 0)->count();
@@ -109,5 +113,10 @@ class AdminController extends Controller
         $approvedRooms = Room::where('approved', 1)->get();
 
         return view('admin.approvedRooms', compact('approvedRooms'));
+    }
+
+    public function exportApprovedOwners()
+    {
+        return Excel::download(new ApprovedOwnersExport, 'approved_owners.xlsx');
     }
 }

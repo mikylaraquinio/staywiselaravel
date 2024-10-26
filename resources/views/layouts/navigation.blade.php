@@ -35,7 +35,34 @@
                         @endif
                         @if (Auth::user()->role === 'renter')
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">Status</a>
+                            <a class="nav-link" href="{{ url('/renter/status') }}">Status</a>
+                        </li>
+                        <!-- Notifications Icon with Dropdown -->
+                        <li class="nav-item dropdown mx-2">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell-fill"></i> <!-- Bootstrap bell icon -->
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    </span>
+                                @endif
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url('/bookings/' . $notification->data['booking_id']) }}">
+                                            {{ $notification->data['message'] }}
+                                            <br>
+                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li><span class="dropdown-item text-center">No new notifications</span></li>
+                                @endforelse
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a href="{{ route('notifications.markAllRead') }}" class="dropdown-item text-center">Mark all as read</a></li>
+                            </ul>
                         </li>
                         @endif
                         @endauth

@@ -5,7 +5,7 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('ownersDashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -17,7 +17,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('post') }}">
+                <a class="nav-link" href="{{ route('ownersDashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
                 </a>
@@ -28,6 +28,12 @@
 
 
             <!-- Nav Item - Users -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('owner.create') }}">
+                    <i class="bi bi-gear"></i>
+                    <span>Create Room</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>
@@ -58,88 +64,101 @@
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column"> <!-- Adjust margin here -->
+        <div id="content-wrapper" class="flex-grow-1 d-flex flex-column">
             <!-- Main Content -->
             <div id="content" class="container-fluid">
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Owners Dashboard</h1>
-                    </a>
+                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                 </div>
 
                 <!-- Content Row -->
                 <div class="row">
-                    <div class="page-content">
-                        <div class="page-header">
-                            <div class="container-fluid">
-                                <div class="text-center mb-4">
-                                    <h1 class="h3">Add Room</h1>
+                    <!-- Owners Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-person-fill-check" style="font-size: 4rem;"></i>
+                                    </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Rooms</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$roomCount}}</div>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <!-- Display Success Message -->
-                                @if (session('success'))
-                                    <div class="alert alert-success">
-                                        {{ session('success') }}
+                    <!-- Renters Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-person-fill" style="font-size: 4rem;"></i>
                                     </div>
-                                @endif
-
-                                <!-- Display Validation Errors -->
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Available Rooms</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$availableRoomCount}}</div>
                                     </div>
-                                @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <form action="{{ url('add_room') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-
-                                    <div class="mb-3">
-                                        <label for="room_title" class="form-label">Room Title</label>
-                                        <input type="text" name="room_title" id="room_title" class="form-control" placeholder="Enter room title" required>
+                    <!-- Pending User Requests Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-person-add" style="font-size: 4rem;"></i>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label">Room Description</label>
-                                        <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter room description" required></textarea>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Booking Request</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $pendingBookingCount  }}</div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div class="mb-3">
-                                        <label for="price" class="form-label">Price</label>
-                                        <input type="number" name="price" id="price" class="form-control" placeholder="Enter room price" required>
+                    <!-- Pending Post Requests Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-house-add-fill" style="font-size: 4rem;"></i>
                                     </div>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Accepted Bookings</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $acceptedBookingCount }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div class="mb-3">
-                                        <label for="amenities" class="form-label">Amenities</label>
-                                        <input type="text" name="amenities" id="amenities" class="form-control" placeholder="Enter amenities (e.g., WiFi, TV)" required>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-auto">
+                                        <i class="bi bi-house-add-fill" style="font-size: 4rem;"></i>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="room_type" class="form-label">Room Type</label>
-                                        <select name="room_type" id="room_type" class="form-select" required>
-                                            <option value="" disabled selected>Select room type</option>
-                                            <option value="studio">Studio</option>
-                                            <option value="apartment">Apartment</option>
-                                        </select>
+                                    <div class="col text-right">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Rejected Bookings</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $rejectedBookingCount }}</div>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="image" class="form-label">Upload Image</label>
-                                        <input type="file" name="image" id="image" class="form-control" accept="image/*">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <button class="btn btn-primary" type="submit">Add Room</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
