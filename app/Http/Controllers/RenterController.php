@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BookingsExport;
 use Illuminate\Support\Facades\Auth;
 
 class RenterController extends Controller
@@ -84,51 +86,40 @@ class RenterController extends Controller
 
     public function edit($id)
     {
-        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-
-        if ($booking->approved == 1) {  // Booking is approved
-            return redirect()->route('renter.status')->with('error', 'You cannot edit an approved booking.');
-        }
-
-        return view('renter.status', compact('booking'));
+        $booking = Booking::where('id', $id)->where('renter_id', auth()->id())->firstOrFail();
+        return view('renter.edit', compact('booking'));
     }
 
-    // Update a booking's details (if pending or rejected)
-    public function updateStatus(Request $request, $id)
+    public function update(Request $request, $id)
     {
-        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-
-        if ($booking->approved == 1) {
-            return redirect()->route('renter.status')->with('error', 'You cannot edit an approved booking.');
-        }
-
         $request->validate([
-            'room_id' => 'required|exists:room,id',
-            'name' => 'required|string|max:255',
             'move_in_date' => 'required|date',
-            'move_out_date' => 'required|date|after:move_in_date',
+            'move_out_date' => 'required|date|after_or_equal:move_in_date',
             'number_of_occupants' => 'required|integer|min:1',
             'message' => 'nullable|string|max:500',
-            'duration' => 'required|string',
+            
         ]);
 
-        $booking->update($request->all());
+        // Update the booking details
+        $booking = Booking::where('id', $id)->where('renter_id', auth()->id())->firstOrFail();
+        $booking->move_in_date = $request->move_in_date;
+        $booking->move_out_date = $request->move_out_date;
+        $booking->number_of_occupants = $request->number_of_occupants;
+        $booking->save();
 
-        return redirect()->route('renter.status')->with('success', 'Booking updated successfully.');
+        return redirect()->route('renter.bookings')->with('success', 'Booking updated successfully.');
     }
 
-    // Cancel a booking (if pending or rejected)
     public function destroy($id)
     {
-        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-
-        if ($booking->approved == 1) {
-            return redirect()->route('renter.status')->with('error', 'You cannot cancel an approved booking.');
-        }
-
+        $booking = Booking::where('id', $id)->where('renter_id', auth()->id())->firstOrFail();
         $booking->delete();
 
         return redirect()->route('renter.status')->with('success', 'Booking canceled successfully.');
     }
     
+    public function exportExcel()
+    {
+        return Excel::download(new BookingsExport, 'bookings.xlsx');
+    }
 }

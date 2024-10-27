@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\User;
 use App\Notifications\BookingAcceptedNotification;
 use App\Notifications\BookingAccepted;
+use App\Notifications\BookingRejected;
 use Illuminate\Http\Request;
 
 class OwnerController extends Controller
@@ -93,12 +94,22 @@ class OwnerController extends Controller
 
     // Method to reject a booking request
     public function reject($id)
-    {
-        $booking = Booking::findOrFail($id); // Find booking by ID
-        $booking->delete(); // Delete the booking
+{
+    $booking = Booking::findOrFail($id); // Find booking by ID
+    $booking->approved = 2; // Assuming you use this to indicate rejection
+    $booking->save();
 
-        return redirect()->route('owner.bookings')->with('success', 'Booking rejected successfully!'); // Redirect back with success message
+    // Notify the renter
+    $renter = $booking->user; // Get the user associated with the booking
+    if ($renter) { // Check if renter exists
+        $renter->notify(new BookingRejected($booking));
+    } else {
+        // Handle the case where the renter is not found
+        return redirect()->route('owner.bookings')->with('error', 'Renter not found.');
     }
+
+    return redirect()->route('owner.bookings')->with('success', 'Booking rejected successfully!'); // Redirect back with success message
+}
 
     // Method to show approved bookings
     public function approvedBookings()

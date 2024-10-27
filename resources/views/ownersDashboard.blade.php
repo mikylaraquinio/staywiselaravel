@@ -47,6 +47,7 @@
                     </div>
                 </div>
             </li>
+            
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComponents" aria-expanded="false" aria-controls="collapseComponents">
                     <i class="bi bi-gear"></i>

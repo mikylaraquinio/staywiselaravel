@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Models\Owner;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ApprovedOwnersExport implements FromCollection
+class ApprovedOwnersExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection

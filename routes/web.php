@@ -30,6 +30,10 @@ Route::get('/renter.status', function () {
     return view('renter.status');
 })->middleware(['auth', 'verified'])->name('renter.status');
 
+Route::get('/renter.edit', function () {
+    return view('renter.edit');
+})->middleware(['auth', 'verified'])->name('renter.edit');
+
 Route::get('/ownersDashboard', function () {
     return view('ownersDashboard');
 })->middleware(['auth', 'verified'])->name('ownersDashboard');
@@ -72,6 +76,8 @@ Route::delete('/room/reject/{id}', [RoomController::class, 'reject'])->name('rej
 Route::get('/dorm', [RoomController::class, 'showDorms'])->middleware(['auth', 'verified'])->name('dorm');
 Route::get('/viewdorm', [RoomController::class, 'showDorms'])->middleware(['auth', 'verified'])->name('viewdorm');
 Route::get('/dorm/{id}', [RoomController::class, 'show'])->name('viewdorm');
+Route::get('/dashboard', [RoomController::class, 'showDashboard'])->name('dashboard');
+
 
 //Owner Post
 Route::get('/owner/edit/{id}', [OwnerController::class, 'edit'])->name('editRoom');
@@ -102,7 +108,7 @@ Route::post('/admin/owner/{id}/reject', [AdminController::class, 'reject'])->nam
 
 //Admin - Approved Owner
 Route::get('/admin/approvedOwner', [AdminController::class, 'approvedOwner'])->name('admin.approvedOwner');
-Route::get('/admin/export-approved-owners', [AdminController::class, 'exportApprovedOwners'])->name('admin.exportApprovedOwners');
+
 //Admin - Approved Owner
 Route::get('/admin/rejectedOwner', [AdminController::class, 'rejectedOwner'])->name('admin.rejectedOwner');
 
@@ -127,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/renter/status', [RenterController::class, 'index'])->name('renter.status.index');
-    Route::get('/renter/status/{id}/edit', [RenterController::class, 'edit'])->name('renter.status.edit');
+    Route::get('/renter/status/edit/{id}', [RenterController::class, 'edit'])->name('renter.status.edit');
     Route::put('/renter/status/{id}', [RenterController::class, 'update'])->name('renter.status.update');
     Route::delete('/renter/status/{id}', [RenterController::class, 'destroy'])->name('renter.status.cancel');
     Route::get('/bookings', [RenterController::class, 'showBookings'])->middleware('auth');
@@ -145,3 +151,6 @@ Route::get('/owner/rejected-bookings', [OwnerController::class, 'rejectedBooking
 //Notifications
 Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 
+//Exports
+Route::get('/renter/bookings/export-excel', [RenterController::class, 'exportExcel'])->name('renter.bookings.exportExcel');
+Route::get('/admin/export-approved-owners', [AdminController::class, 'exportApprovedOwners'])->name('admin.exportApprovedOwners');

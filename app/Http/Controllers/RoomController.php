@@ -68,6 +68,7 @@ class RoomController extends Controller
         // Pass the room details to the view
         return view('viewdorm', compact('room'));
     }
+    
 
     public function showDorms()
     {
@@ -77,6 +78,16 @@ class RoomController extends Controller
                  ->get();
                  
         return view('dorm', compact('rooms'));
+    }
+
+    public function showDashboard()
+    {
+        // Fetch approved rooms for display
+        $rooms = Room::where('approved', true)
+                    ->where('available', true)
+                    ->get();
+                    
+        return view('dashboard', compact('rooms'));
     }
 
     public function postRequest()

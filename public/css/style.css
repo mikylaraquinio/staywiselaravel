@@ -1,25 +1,24 @@
-body{
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
 }
-/*navbar*/
-.navbar{
+
+/* Navbar Styles */
+.navbar {
     background-color: #FFFFFF;
 }
 
-.navbar, .navbar a{
+.navbar, .navbar a {
     color: #515674;
     transition: color 0.3s ease;
 }
 .navbar a:hover {
     color: #000000;
 }
-.navbar, .login a {
-    color: #515674;
-}
-.login:hover, .login a:hover {
-    color: #000000;
-}
-/*landing page*/
-.hero-section .container{
+
+/* Landing Page Styles */
+.hero-section .container {
     height: 100vh;
     z-index: 1;
     position: relative;
@@ -29,7 +28,78 @@ body{
     align-items: flex-start;
     padding-left: 50px;
 }
-.hero-section h1{
+
+.hero .container {
+    height: 100vh;
+    z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 50px;
+}
+.hero {
+    background-image: url('/images/bg.jpeg'); /* Relative URL */
+    background-size: cover; /* Ensure the image covers the entire section */
+    background-position: center; /* Center the image */
+    height: 100vh; /* Set height to fill the viewport */
+    position: relative; /* Position relative to the parent for any absolute children */
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Black color with 50% opacity */
+    z-index: 1; /* Make sure the overlay is on top of the background */
+}
+.hero h1 {
+    font-size: 1.5em;
+    text-align: left;
+    margin-bottom: 5px; 
+    color: white;
+}
+
+.btn-heros {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+    border-radius: 10px;
+    border: 1px solid #515674;
+    font-weight: bold;
+    background-color: #515674;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.btn-heros:hover {
+    background-color: #414760; /* Darker background color on hover */
+    border: 1px solid #414760; /* Border color changes with the background */
+    transform: scale(1.05); /* Slightly enlarges the button on hover */
+}
+
+.available-rooms {
+    padding: 20px 0;
+    background-color: #f8f9fa; /* Light background color */
+}
+
+.available-rooms h2 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.available-rooms p {
+    font-size: 1.2em;
+}
+
+
+.hero-section h1 {
     font-size: 1.5em;
     text-align: center;
     margin-bottom: 20px; 
@@ -57,10 +127,10 @@ body{
     transform: scale(1.05); /* Slightly enlarges the button on hover */
 }
 
-/*login page*/
+/* Login Page Styles */
 * {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -69,25 +139,28 @@ body{
     --grad-clr1: #141E30;
     --grad-clr2: #243B55;
 }
+
 .registration {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin-bottom: 15px;
-    
 }
-.registration .container{
+
+.registration .container {
     position: relative;
-    width: 800px;
-    height: 500px;
+    width: 800px; /* Adjust for smaller screens */
+    height: 500px; /* Adjust for smaller screens */
     background-color: #FFF;
     box-shadow: 25px 30px 55px #5557;
     border-radius: 13px;
     overflow: hidden;
     display: flex;
 }
-.form-container{
+
+/* Form Container Styles */
+.form-container {
     position: absolute;
     width: 60%;
     height: 100%;
@@ -97,12 +170,16 @@ body{
     flex-direction: column;
     justify-content: center;
 }
-.sign-up-container{
+
+.sign-up-container {
     z-index: 2;
 }
-.sign-in-container{
+
+.sign-in-container {
     z-index: 2;
 }
+
+/* Form Styles */
 form {
     height: 100%;
     display: flex;
@@ -111,31 +188,34 @@ form {
     justify-content: center;
     background-color: transparent;
 }
-h1{
+
+h1 {
     color: var(--grad-clr1);
     margin-bottom: 20px;
     text-align: center;
 }
-span{
+
+span {
     font-size: 12px;
 }
-.infield{
+
+.infield {
     position: relative;
     margin: 8px 0px;
     width: 100%;
-    
 }
-.input{
+
+.input {
     width: 100%;
     padding: 12px 10px;
     background-color: #f3f3f3;
     border: 1px solid #ccc;
     outline: none;
     border-radius: 5px; /* Add slight rounding for a cleaner look */
-    transition: border-color 0.3s
+    transition: border-color 0.3s;
 }
 
-.label{
+.label {
     position: absolute;
     left: 50%;
     top: 100%;
@@ -145,20 +225,23 @@ span{
     background: var(--linear-grad);
     transition: 0.3s;
 }
-input:focus-label{
+
+input:focus-label {
     width: 100%;
 }
-.registration a{
+
+.registration a {
     color: #333;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0px;
 }
-.registration a.forgot{
+
+.registration a.forgot {
     padding-bottom: 3px;
 }
 
-.registration button{
+.registration button {
     border-radius: 20px;
     background: var(--grad-clr2);
     color: #FFF;
@@ -176,15 +259,18 @@ input:focus-label{
     vertical-align: middle;
     line-height: normal; /* Ensures the text aligns vertically */
 }
-.form-container button{
+
+.form-container button {
     margin-top: 17px;
     transition: 80ms ease-in;
 }
-.form-container button:hover{
+
+.form-container button:hover {
     background: #FFF;
     color: var(--grad-clr1);
 }
-.overlay-container{
+
+.overlay-container {
     position: absolute;
     top: 0;
     left: 60%;
@@ -194,7 +280,8 @@ input:focus-label{
     transition: transform 0.6s ease-in-out;
     z-index: 9;
 }
-#overlayBtn{
+
+#overlayBtn {
     cursor: pointer;
     position: absolute;
     left: 50%;
@@ -206,7 +293,8 @@ input:focus-label{
     background: transparent;
     border-radius: 20px;
 }
-.overlay{
+
+.overlay {
     position: relative;
     background: var(--linear-grad);
     color: #FFF;
@@ -215,7 +303,8 @@ input:focus-label{
     width: 250%;
     transition: transform 0.6s ease-in-out;
 }
-.overlay-panel{
+
+.overlay-panel {
     position: absolute;
     display: flex;
     align-items: center;
@@ -227,116 +316,162 @@ input:focus-label{
     width: 340px;
     transition: 0.6s ease-in-out;
 }
-.overlay-left{
+
+.overlay-left {
     right: 60%;
     transform: translateX(-12%);
 }
-.overlay-right{
+
+.overlay-right {
     right: 0%;
     transform: translateX(0%);
 }
-.overlay-panel h1{
+
+.overlay-panel h1 {
     color: #FFF;
 }
-p{
+
+p {
     font-size: 14px;
     font-weight: 300;
     line-height: 20px;
     letter-spacing: 0.5px;
     margin: 25px 0px 35px;
 }
-.overlay-panel button{
+
+.overlay-panel button {
     border: none;
     background-color: transparent;
     margin-bottom: 20px;
     margin-right: 12px;
 }
+
 form button {
     width: 100%; /* Ensure the button takes full width of the form */
     margin-top: 15px;
 }
-.right-panel-active .overlay-container{
-    transform: translateX(-150%)
+
+.right-panel-active .overlay-container {
+    transform: translateX(-150%);
 }
-.right-panel-active .overlay{
+
+.right-panel-active .overlay {
     transform: translateX(50%);
 }
-.right-panel-active .overlay-left{
+
+.right-panel-active .overlay-left {
     transform: translateX(25%);
 }
-.right-panel-active .overlay-right{
+
+.right-panel-active .overlay-right {
     transform: translateX(35%);
 }
-.right-panel-active .sign-in-container{
+
+.right-panel-active .sign-in-container {
     transform: translateX(20%);
     opacity: 0;
 }
-.right-panel-active .sign-up-container{
+
+.right-panel-active .sign-up-container {
     transform: translateX(66.7%);
     opacity: 1;
     z-index: 5;
     animation: show 0.6s;
 }
-@keyframes show{
-    0%, 50%{
+
+@keyframes show {
+    0%, 50% {
         opacity: 0;
         z-index: 1;
     }
-    50.1%, 100%{
+    50.1%, 100% {
         opacity: 1;
         z-index: 5;
     }
 }
-.btnScaled{
+
+.btnScaled {
     animation: scaleBtn 0.6s;
 }
-@keyframes scaleBtn{
-    0%{
+
+@keyframes scaleBtn {
+    0% {
         width: 143.67px;
     }
-    50%{
-        width:250px;
+    50% {
+        width: 250px;
     }
-    100%{
+    100% {
         width: 1443.67px;
     }
 }
 
-
-/*carousel*/
-
-.c-item{
-    height: 560px;
+/* Carousel Styles */
+.carousel-item {
+    position: relative; /* Make the carousel item relative */
+    height: 400px; /* Set your desired height */
+    overflow: hidden;
 }
-.c-img{
+
+.carousel-item img {
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.6);
+    filter: brightness(0.7);
 }
-/*carousel*/
 
-.overview{
+
+
+.btn-c {
+    display: inline-block;
+    padding: 10px 10px;
+    margin-top: 10px;
+    font-size: 15px;
+    color: white;
+    border-radius: 10px;
+    border: 1px solid #515674;
+    background-color: #515674;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+
+
+/* Overview Styles */
+.overview {
     height: 180px;
     background-color: #d3d3d3;
 }
-
 
 #feedback {
     padding-bottom: 5rem;
 }
 
-#aboutus {
-    padding-top: 5rem;
+#aboutus .text-muted {
+    font-size: 0.9rem; /* Smaller size for subtitle */
+}
+
+#aboutus h2 {
+    font-size: 1.75rem; /* Adjust heading size */
+}
+
+#aboutus .lead {
+    font-size: 0.9rem; /* Adjust lead paragraph size */
 }
 
 
+/* Media Queries for Responsiveness */
+@media(max-width: 1199px) {
+    .navbar {
+        padding: 0 20px; /* Add some padding on smaller screens */
+    }
+    .hero-section .container {
+        padding-left: 20px; /* Less padding on smaller screens */
+    }
+}
 
-
-
-
-
-@media(max-width: 991px){
-    .sidebar{
+@media(max-width: 991px) {
+    .sidebar {
         background-color: rgba(255,255,255,0.15);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
@@ -351,31 +486,42 @@ form button {
     }
 
     .form-container {
-        width: 100%;
+        width: 100%; /* Adjusts form container to full width */
+        padding: 20px; /* Add padding for mobile */
+    }
+
+    .overlay-panel {
+        width: 100%; /* Adjusts overlay panel to full width */
     }
 
     .overlay-container {
-        display: none; /* Hide overlay on smaller screens */
+        left: 0;
+        width: 100%; /* Overlay takes full width */
     }
-    form {
-        padding: 0 20px; /* Adjust padding for smaller devices */
+
+    h1 {
+        font-size: 24px; /* Responsive heading size */
+    }
+
+    .input, button {
+        font-size: 14px; /* Smaller input and button font size */
     }
 }
 
-label
-    {
-     
-        display: inline-block;
-        width: 200px;
+@media (max-width: 480px) {
+    .hero-section h1 {
+        font-size: 20px; /* Smaller hero section heading */
     }
 
-    .div_deg
-    {
-    padding-top: 30px;
+    .btn-hero {
+        font-size: 16px; /* Smaller button font size */
     }
+}
 
-    .div_center
-    {
-        text-align: center;
-        padding-top: 40px;
-    }
+.intro-heading {
+    font-size: 2em; /* Adjust size as needed */
+}
+
+.intro-text {
+    font-size: 1em; /* Adjust size as needed */
+}

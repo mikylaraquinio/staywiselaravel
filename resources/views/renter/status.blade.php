@@ -11,9 +11,10 @@
                 <h1 class="h3 mb-0 text-gray-800">My Bookings</h1>
 
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        My Bookings
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-table me-1"></i>My Bookings</span>
+                            
+                        <a href="{{ route('renter.bookings.exportExcel') }}" class="btn btn-primary">Export to Excel</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -40,16 +41,26 @@
                                                 <td>{{ $booking->move_in_date }}</td>
                                                 <td>{{ $booking->move_out_date }}</td>
                                                 <td>{{ $booking->number_of_occupants }}</td>
-                                                <td>{{ $booking->approved ? 'Approved' : 'Pending' }}</td>
                                                 <td>
-                                                    @if (!$booking->approved)
-                                                        <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                                                        <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE') <!-- Use DELETE method for canceling -->
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel</button>
-                                                        </form>
+                                                    @if ($booking->approved == 1)
+                                                        Approved
+                                                    @elseif ($booking->approved == 2)
+                                                        Rejected
+                                                    @else
+                                                        Pending
                                                     @endif
+                                                </td>
+                                                <td>
+                                                @if (!$booking->approved && !$booking->rejected)
+                                                    <a href="{{ route('renter.status.edit', $booking->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                                    <form action="{{ route('renter.status.cancel', $booking->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel</button>
+                                                    </form>
+                                                @else
+                                                    <span>No actions available</span>
+                                                @endif
                                                 </td>
                                             </tr>
                                         @endforeach

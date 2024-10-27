@@ -37,4 +37,10 @@ class Room extends Model
         return $this->image ? asset('storage/' . $this->image) : asset('images/default.png');
     }
 
+    public function index()
+{
+    $dorms = Dorm::all(); // Fetch all dorms from the database
+    return view('your-view-name', compact('dorms'));
+}
+
 }
