@@ -68,8 +68,8 @@
 
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        Accepted Booking Requests
+                        <i class="fas fa-table me-1"></i> Accepted Booking Requests
+                        <a href="{{ route('owner.exportAcceptedBookings') }}" class="btn btn-primary btn-sm">Export</a>
                     </div>
 
                     @if ($approvedBookings->isEmpty())
@@ -83,6 +83,8 @@
                                     <th>Guest Name</th>
                                     <th>Move-In Date</th>
                                     <th>Move-Out Date</th>
+                                    <th>Occupants</th>
+                                    <th>Request</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,6 +95,8 @@
                                         <td>{{ $booking->name }}</td>
                                         <td>{{ $booking->move_in_date }}</td>
                                         <td>{{ $booking->move_out_date }}</td>
+                                        <td>{{ $booking->number_of_occupants}}</td>
+                                        <td>{{ $booking->message}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

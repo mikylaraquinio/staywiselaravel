@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Booking;
 use App\Models\User;
+use App\Exports\OBookingsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\BookingAcceptedNotification;
 use App\Notifications\BookingAccepted;
 use App\Notifications\BookingRejected;
@@ -173,6 +175,12 @@ class OwnerController extends Controller
             'acceptedBookingCount',
             'rejectedBookingCount'
         ));
+    }
+    
+    public function export()
+    {
+        // Use the OBookingsExport class to create and download the Excel file
+        return Excel::download(new OBookingsExport, 'bookings_' . date('Ymd') . '.xlsx');
     }
 
 }

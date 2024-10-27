@@ -79,6 +79,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Room Title</th>
+                                        <th>Location</th>
                                         <th>Description</th>
                                         <th>Price</th>
                                         <th>Amenities</th>
@@ -92,6 +93,7 @@
                                         <tr>
                                             <td>{{ $room->id }}</td>
                                             <td>{{ $room->room_title }}</td>
+                                            <td>{{ $room->location }}</td>
                                             <td>{{ $room->description }}</td>
                                             <td>{{ number_format($room->price, 2) }}</td>
                                             <td>{{ $room->amenities }}</td>

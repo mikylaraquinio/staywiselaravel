@@ -67,6 +67,7 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>Owner_ID</th>
                                         <th>Name</th>
                                         <th>Contact Number</th>
                                         <th>Email</th>
@@ -77,6 +78,7 @@
                                 <tbody>
                                     @foreach ($approvedOwners as $owner)
                                         <tr>
+                                            <td>{{ $owner->id }}</td>
                                             <td>{{ $owner->name }}</td>
                                             <td>{{ $owner->number }}</td>
                                             <td>{{ $owner->email }}</td>

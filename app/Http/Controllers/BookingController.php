@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Room; // Import your Room model
 use App\Models\Booking;
+use App\Exports\OBookingsExport;
+use App\Exports\AcceptedBookingsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -33,7 +36,6 @@ class BookingController extends Controller
             'move_out_date' => 'required|date|after:move_in_date',
             'number_of_occupants' => 'required|integer|min:1',
             'message' => 'nullable|string|max:500',
-            'duration' => 'required|string', // Validate duration if needed
         ]);
 
         // Create a new booking and include the 'name'
@@ -43,7 +45,6 @@ class BookingController extends Controller
             'move_in_date' => $request->move_in_date,
             'move_out_date' => $request->move_out_date,
             'number_of_occupants' => $request->number_of_occupants,
-            'duration' => $request->duration,
             'message' => $request->message,
             'approved' => 0, // Set default value
         ]);
@@ -52,5 +53,15 @@ class BookingController extends Controller
         return redirect()->back()->with('success', 'Booking request submitted successfully.');
     }
 
+    public function export()
+    {
+        // Use the OBookingsExport class to create and download the Excel file
+        return Excel::download(new OBookingsExport, 'bookings_' . date('Ymd') . '.xlsx');
+    }
+
+    public function exportAcceptedBookings()
+    {
+        return Excel::download(new AcceptedBookingsExport, 'accepted_bookings_' . date('Ymd') . '.xlsx');
+    }
 
 }

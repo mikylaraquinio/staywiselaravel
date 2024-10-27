@@ -13,16 +13,19 @@ class ApprovedOwnersExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Owner::where('approved', true)->get();
+        // Select only the fields you want to export
+        return Owner::where('approved', true)
+            ->get(['id as Owner_ID', 'name as Name', 'number as Contact_Number', 'email as Email', 'identification as Identification', 'image as ID_Image']);
     }
 
     public function headings(): array
     {
         return [
+            'Owner_ID',
             'Name',
             'Contact Number',
             'Email',
-            'ID',
+            'Identification',
             'ID Image',
         ];
     }

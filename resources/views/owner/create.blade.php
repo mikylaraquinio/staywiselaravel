@@ -109,8 +109,25 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="location" class="form-label">Location</label>
+                                        <select name="location" id="location" class="form-select" required>
+                                            <option value="" disabled selected>Select room location</option>
+                                            <option value="Tondaligan Beach">Tondaligan Beach</option>
+                                            <option value="Arellano St.">Arellano St.</option>
+                                            <option value="Magsaysay Avenue">Magsaysay Avenue</option>
+                                            <option value="Dagupeña Heights">Dagupeña Heights</option>
+                                            <option value="Barangay Pugaro">Barangay Pugaro</option>
+                                            <option value="Salinap">Salinap</option>
+                                            <option value="Malued">Malued</option>
+                                            <option value="Bonuan">Bonuan</option>
+                                            <option value="San Vicente">San Vicente</option>
+                                            <option value="Mangin">Mangin</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label for="description" class="form-label">Room Description</label>
-                                        <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter room description" required></textarea>
+                                        <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter room description(include full address)" required></textarea>
                                     </div>
 
                                     <div class="mb-3">
@@ -119,16 +136,52 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="amenities" class="form-label">Amenities</label>
-                                        <input type="text" name="amenities" id="amenities" class="form-control" placeholder="Enter amenities (e.g., WiFi, TV)" required>
+                                        <label class="form-label">Amenities</label><br>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="aircon" value="Aircon">
+                                            <label for="aircon">Aircon</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="meeting_room" value="Meeting Room">
+                                            <label for="meeting_room">Meeting Room</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="study_hub" value="Study Hub">
+                                            <label for="study_hub">Study Hub</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="swimming_pool" value="Swimming Pool">
+                                            <label for="swimming_pool">Swimming Pool</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="parking" value="Parking">
+                                            <label for="parking">Parking</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="commercial_spaces" value="Commercial Spaces">
+                                            <label for="commercial_spaces">Commercial Spaces</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="community_area" value="Community Area">
+                                            <label for="community_area">Community Area</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="elevator" value="Elevator">
+                                            <label for="elevator">Elevator</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" name="amenities[]" id="fitness_gym" value="Fitness Gym">
+                                            <label for="fitness_gym">Fitness Gym</label>
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="room_type" class="form-label">Room Type</label>
                                         <select name="room_type" id="room_type" class="form-select" required>
                                             <option value="" disabled selected>Select room type</option>
-                                            <option value="studio">Studio</option>
-                                            <option value="apartment">Apartment</option>
+                                            <option value="single">Single</option>
+                                            <option value="double">Double</option>
+                                            <option value="bunk_bed">Bunk Bed</option>
                                         </select>
                                     </div>
 

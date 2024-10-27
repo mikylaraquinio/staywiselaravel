@@ -71,6 +71,7 @@
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
                         Approved Room Posts
+                        <a href="{{ route('admin.rooms.export') }}" class="btn btn-primary btn-sm mb-3">Export Approved Rooms</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

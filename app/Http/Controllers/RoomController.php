@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Exports\ApprovedRoomsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoomController extends Controller
 {
@@ -11,37 +13,40 @@ class RoomController extends Controller
     {
         $request->validate([
             'room_title' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
-            'amenities' => 'required|string',
+            'amenities' => 'array',
             'room_type' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:5000', 
         ]);
-
+    
         // Handle image upload
+        $filename = null; // Initialize filename
         if ($request->has('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-
             $filename = time().'.'.$extension;
-
+    
             $path = 'uploads/rooms/';
-            $file->move($path,$filename);
+            $file->move($path, $filename);
+            $filename = $path . $filename; // Update filename to include the path
         }
-        
+    
         $ownerId = auth()->id();
-
+    
         // Create the room entry, setting approved to false
         $room = Room::create([
             'room_title' => $request->room_title,
+            'location' => $request->location,
             'description' => $request->description,
             'price' => $request->price,
-            'amenities' => $request->amenities,
             'room_type' => $request->room_type,
-            'image' => $path.$filename,
+            'image' => $filename,
             'approved' => false,
             'available' => true,
             'owner_id' => $ownerId,
+            'amenities' => json_encode($request->amenities), // Store amenities as JSON
         ]);
 
         // Now you can access the room ID
@@ -111,6 +116,11 @@ class RoomController extends Controller
     
         // Return the view with the rooms data
         return view('post', compact('rooms'));
+    }
+
+    public function exportApprovedRooms()
+    {
+        return Excel::download(new ApprovedRoomsExport, 'approved_rooms.xlsx');
     }
     
 }

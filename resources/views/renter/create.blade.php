@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <main class="py-5 d-flex justify-content-center main-bg">
+    <main class="py-5 d-flex justify-content-center main-bg" >
         <div class="b-container mt-5">
             <div class="row justify-content-center">
                 <!-- Room Details Column -->
@@ -14,9 +14,14 @@
                         <div class="card-body">
                             <h3 class="fw-bold text-primary mb-4">Room Details</h3>
                             <p><strong>Description:</strong> {{ $room->description }}</p>
-                            <p><strong>Price:</strong> ₱{{ number_format($room->price, 2) }}</p>
-                            <p><strong>Amenities:</strong> {{ $room->amenities }}</p>
+                            <p><strong>Price:</strong> ₱{{ number_format($room->price, 2) }} /per month</p>
                             <p><strong>Type:</strong> {{ $room->room_type }}</p>
+                            <p><strong>Amenities:</strong></p>
+                                <ul>
+                                    @foreach (json_decode($room->amenities, true) as $amenity)
+                                        <li> - {{ ucfirst($amenity) }}</li> <!-- Use ucfirst to capitalize the first letter -->
+                                    @endforeach
+                                </ul>
                         </div>
                     </div>
                 </div>
@@ -50,25 +55,20 @@
                                 <div class="row mb-4">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="move-in-date" class="form-label">Preferred Move-In Date</label>
+                                            <label for="move-in-date" class="form-label">Preferred Move-In <br>Date</label>
                                             <input type="date" class="form-control border-secondary input-demure" id="move-in-date" name="move_in_date" required min="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="move-out-date" class="form-label">Preferred Move-Out Date</label>
+                                            <label for="move-out-date" class="form-label">Expected Move-Out Date</label>
                                             <input type="date" class="form-control border-secondary input-demure" id="move-out-date" name="move_out_date" required min="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="form-group mb-4">
-                                    <label for="duration" class="form-label">Duration of Stay (Weeks/Months/Semester)</label>
-                                    <input type="text" class="form-control border-secondary input-demure" id="duration" name="duration" required>
-                                </div>
-
                                 <div class="form-group mb-5">
-                                    <label for="message" class="form-label">Message</label>
+                                    <label for="message" class="form-label">Request</label>
                                     <textarea class="form-control border-secondary input-demure" id="message" name="message" rows="4"></textarea>
                                 </div>
 

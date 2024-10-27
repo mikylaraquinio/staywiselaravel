@@ -23,9 +23,16 @@
                             <!-- Room Details Section -->
                             <div class="col-lg-6 col-md-12 p-4">
                                 <h3 class="fw-bold text-primary mb-3">{{ $room->room_title }}</h3>
+                                <p class="mb-2"><strong>Location:</strong> {{ $room->location }}</p>
                                 <p class="mb-2"><strong>Description:</strong> {{ $room->description }}</p>
                                 <p class="mb-2"><strong>Price:</strong> ₱{{ number_format($room->price, 2) }}</p>
-                                <p class="mb-2"><strong>Amenities:</strong> {{ $room->amenities }}</p>
+                                <p class="mb-2"><strong>Amenities:</strong>
+                                    <ul>
+                                        @foreach (json_decode($room->amenities, true) as $amenity)
+                                            <li> - {{ ucfirst($amenity) }}</li> <!-- Use ucfirst to capitalize the first letter -->
+                                        @endforeach
+                                    </ul>
+                                </p>
                                 <p class="mb-2"><strong>Type:</strong> {{ $room->room_type }}</p>
                                 
                                 <!-- Book Now Button -->

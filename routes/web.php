@@ -154,3 +154,7 @@ Route::get('/notifications/mark-all-read', [NotificationController::class, 'mark
 //Exports
 Route::get('/renter/bookings/export-excel', [RenterController::class, 'exportExcel'])->name('renter.bookings.exportExcel');
 Route::get('/admin/export-approved-owners', [AdminController::class, 'exportApprovedOwners'])->name('admin.exportApprovedOwners');
+Route::get('/owner/bookings/export', [OwnerController::class, 'export'])->name('owner.bookings.export');
+Route::get('/owner/approved/export', [BookingController::class, 'exportAcceptedBookings'])->name('owner.exportAcceptedBookings');
+Route::get('/admin/rooms/export', [RoomController::class, 'exportApprovedRooms'])->name('admin.rooms.export');
+
